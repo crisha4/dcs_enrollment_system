@@ -1,0 +1,55 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="mb-3">
+        <h4>Admin Profile</h4>
+    </div>
+<div class="card mb-4">
+<div class="card-body">
+<div class="d-flex align-items-center">
+    <div class="ms-3">
+        <h5>John Doe</h5>
+        <p>Admin</p>
+        <p>Email: johndoe@cvsu.edu</p>
+        <p>Phone: +123456789</p>
+        <p>Joined: January 1, 2023</p>
+        <p>Last Login: December 2, 2024</p>
+    </div>
+</div>
+</div>
+</div>
+
+<!-- Profile Edit Form -->
+<div class="card mb-4">
+<div class="card-header">
+<h5>Edit Profile</h5>
+</div>
+<div class="card-body">
+<form>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" value="johndoe@cvsu.edu">
+    </div>
+    <div class="mb-3">
+        <label for="phone" class="form-label">Phone</label>
+        <input type="tel" class="form-control" id="phone" value="+123456789">
+    </div>
+    <button type="submit" class="btn btn-primary">Update Profile</button>
+</form>
+</div>
+</div>
+
+<!-- Admin Activities Section -->
+                    <div class="recent-activities">
+                        <div class="section-title">Recent Activities</div>
+                        <ul class="list-group">
+                            <li class="list-group-item">Added a new student record (Dec 2, 2024, 3:30 PM)</li>
+                            <li class="list-group-item">Updated schedule for BSCS (Dec 2, 2024, 1:15 PM)</li>
+                            <li class="list-group-item">Generated a report for the registrar (Dec 1, 2024, 4:00 PM)</li>
+                        </ul>
+                    </div>
+                </div>
+{% endblock %}

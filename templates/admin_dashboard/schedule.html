@@ -1,0 +1,132 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="wrapper">
+    <div class="main">
+    <nav class="navbar navbar-expand px-3 border-bottom">
+        <div class="navbar-collapse navbar">
+            <h4>Student Schedules</h4>
+        </div>
+    </nav>
+
+<main class="content px-3 py-2">
+    <!-- Tabs for Regular and Irregular Students -->
+    <ul class="nav nav-tabs" id="scheduleTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="regular-tab" data-bs-toggle="tab" data-bs-target="#regular" type="button" role="tab" aria-controls="regular" aria-selected="true">Regular Students</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="irregular-tab" data-bs-toggle="tab" data-bs-target="#irregular" type="button" role="tab" aria-controls="irregular" aria-selected="false">Irregular Students</button>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-3" id="scheduleTabsContent">
+        <!-- Regular Students Schedule -->
+        <div class="tab-pane fade show active" id="regular" role="tabpanel" aria-labelledby="regular-tab">
+                <h4 class="mb-3">Regular Students</h4>
+        <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Section</th>
+                <th>Day</th>
+                <th>Subject</th>
+                <th>Time</th>
+                <th>Room</th>
+                <th>Instructor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>202401</td>
+                <td>John Doe</td>
+                <td>A</td>
+                <td>Monday</td>
+                <td>Math 101</td>
+                <td>8:00 AM - 9:30 AM</td>
+                <td>Room 101</td> 
+                <td>Prof. Smith</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>202402</td>
+                <td>Jane Smith</td>
+                <td>B</td>
+                <td>Tuesday</td>
+                <td>English 102</td>
+                <td>10:00 AM - 11:30 AM</td>
+                <td>Room 102</td> <!-- New Data -->
+                <td>Prof. Doe</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+
+        <!-- Irregular Students Schedule -->
+        <div class="tab-pane fade" id="irregular" role="tabpanel" aria-labelledby="irregular-tab">
+            <h4 class="mb-3">Irregular Students</h4>
+        <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Section</th>
+                <th>Day</th>
+                <th>Subject</th>
+                <th>Time</th>
+                <th>Room</th> 
+                <th>Instructor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td><input type="text" class="form-control" value="202403"></td>
+                <td><input type="text" class="form-control" value="Alex Johnson"></td>
+                <td>
+                    <select class="form-select">
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C" selected>C</option>
+                        <option value="D">D</option>
+                    </select>
+                </td>
+                <td><input type="text" class="form-control" value="Friday"></td>
+                <td><input type="text" class="form-control" value="DCIT85"></td>
+                <td><input type="text" class="form-control" value="3:00 PM - 6:00 PM"></td>
+                <td><input type="text" class="form-control" value="Room 203"></td> <!-- New Input -->
+                <td><input type="text" class="form-control" value="Prof. Guard"></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td><input type="text" class="form-control" value="202404"></td>
+                <td><input type="text" class="form-control" value="Danilo De Jesus"></td>
+                <td>
+                    <select class="form-select">
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D" selected>D</option>
+                    </select>
+                </td>
+                <td><input type="text" class="form-control" value="Wednesday"></td>
+                <td><input type="text" class="form-control" value="Math 102"></td>
+                <td><input type="text" class="form-control" value="1:00 PM - 2:30 PM"></td>
+                <td><input type="text" class="form-control" value="Room 204"></td> <!-- New Input -->
+                <td><input type="text" class="form-control" value="Prof. Cruz"></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+{% endblock %}

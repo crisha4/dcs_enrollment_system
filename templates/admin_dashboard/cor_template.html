@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <Title>COR Template</Title>
+        <meta charset="UTF-8">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+
+            td {
+                padding-left: 25px;
+                padding-right: 10px;
+                line-height: 80%;
+            }
+
+
+            h1{
+                font-size: 20px;
+                padding-bottom: -15px;
+                padding-top: -15px;
+            }
+
+            .flex-container{
+                display: flex;
+            }
+            
+            #table_data{
+                padding-top: 60px;
+            }
+
+            #cvsu_text{
+                text-align: center;
+                line-height: 80%; 
+            }
+
+            #subject_information{
+                border: 1px solid black;
+            }
+
+
+        </style>
+    </head>
+
+    <body>
+
+        <br>
+        <div id="cvsu_text">
+
+            <h1>Cavite State University</h1>
+            <p style="text-align: center; font-size: 12px;">Bacoor City Campus</p>
+            <h1>Registration Form</h1>
+            <br>
+            <br>
+
+
+        </div>
+
+
+        <div class="flex-container">
+
+            <table>
+
+                {% for info in allstudents %}
+
+                <tr>
+                    
+                    <td><b>Student Number:</b> {{  info.studentnumber}}</b> </td>
+                    <td><b>Year:</b> {{ info.year }}</b> </td>
+                    <td><b>Semester:</b> </td>
+                    <td><b>Schoolyear:</b> {{ current_schoolyear }} - {{ ending_schoolyear }} </td>
+                </tr>
+            
+                <tr>
+                
+                    <td><b>Student Name:</b> {{ info.firstname }} {{ info.middlename }} {{ info.lastname }}</td>
+                    <td><b>Date:</b> {{ date_enrolled }}</td>
+                    <td><b>Major:</b> {{ info.major }}</b> </td>
+                    
+                </tr>
+
+                
+                <tr>
+                    <td><b>Course:</b> {{ info.course }}</b> </td>
+                    <td><b>Encoder:</b> </td>
+                </tr>
+
+                <tr>
+                    <td><b>Address:</b> {{ info.address }}</td>
+                    <td><b>Section:</b> {{ info.sectionyear }} - {{info.section}}</b> </td>
+                </tr>
+
+ 
+                {% endfor %}
+
+
+            </table>
+
+            <br>
+
+            <table id="subject_information">
+
+                <tr id="table_header">
+                    <th>Sched Code</th>
+                    <th>Course Code</th>
+                    <th>Course Description</th>
+                    <th>Units/Lec</th>
+                    <th>Units/lab</th>
+                    <th>Time</th>
+                    <th>Day</th>
+                    <th>Room</th>
+                </tr>
+                
+                <tr>
+                    <td>TBA</td>
+                    <td>GNED 14</td>
+                    <td>Dalumat Ng/Sa Filipino</td>
+                    <td>3</td>
+                    <td></td>
+                    <td>4:00 - 6:00/ 7:00 - 9:00</td>
+                    <td>Tues/Wed</td>
+                    <td>301</td>
+                </tr> 
+
+                <tr>
+                    <td>TBA</td>
+                    <td>GNED 02</td>
+                    <td>Ethics</td>
+                    <td>3</td>
+                    <td></td>
+                    <td>2:00 - 4:00</td>
+                    <td>Tues</td>
+                    <td>303</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+        
+    </body>
+
+</html>

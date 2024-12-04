@@ -4,6 +4,7 @@
 
 {% block content %}
 <div class="container-fluid">
+
     <div class="mb-3">
             <h4>Admin Dashboard</h4>
         </div>
@@ -28,7 +29,7 @@
                         <div class="d-flex align-items-start">
                             <div class="flex-grow-1">
                                 <h4 class="mb-2">
-                                    100
+                                    {{ number_of_students_enrolled }}
                                 </h4>
                                 <p class="mb-2">
                                     Total Students
@@ -61,7 +62,6 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Student ID</th>
                             <th scope="col">Name</th>
                             <th scope="col">Course</th>
@@ -70,22 +70,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>202212345</td>
-                            <td>John Salazar</td>
-                            <td>BSCS</td>
-                            <td>3rd Year</td>
-                            <td>Enrolled</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>202212675</td>
-                            <td>John Smith</td>
-                            <td>BSCS</td>
-                            <td>1st Year</td>
-                            <td>Pending</td>
-                        </tr>
+                        {% for student_info in allstudents %}
+                            <tr>
+                                <td>{{ student_info.studentnumber }}</td>
+                                <td>{{ student_info.firstname }} {{ student_info.middlename }} {{ student_info.lastname }}</td>
+                                <td>{{ student_info.course }}</td>
+                                <td>{{ student_info.year }}</td>
+                                <td>{{ student_info.status }}</td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                     
                 </table>

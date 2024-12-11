@@ -1,0 +1,85 @@
+{% extends 'student_dashboard/base.html' %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="mb-3">
+      <h4>Enrollment Status</h4>
+  </div>
+
+  <!-- Enrollment Status Card -->
+  <div class="card border-0 mb-3 shadow-sm">
+      <div class="card-body">
+          <h5>Current Status</h5>
+          <p class="mb-0">Status: <span class="badge bg-success">Enrolled</span></p>
+          <p class="mb-0">Program: Bachelor of Computer Science</p>
+          <p>Year Level: 3rd Year</p>
+      </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="mb-3">
+      <h5>Enrollment Progress</h5>
+      <div class="progress">
+          <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+              Completed
+          </div>
+      </div>
+  </div>
+
+  <!-- Requirements Checklist -->
+  <div class="card border-0 mb-3 shadow-sm">
+      <div class="card-body">
+          <h5>Requirements Checklist</h5>
+          <ul class="list-group">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Submission of COR
+                  <span class="badge bg-success">Completed</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Payment of Fees
+                  <span class="badge bg-warning">Pending</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Approval of Enrollment
+                  <span class="badge bg-success">Approved</span>
+              </li>
+          </ul>
+      </div>
+  </div>
+
+  <!-- Enrolled Subjects Table -->
+  <div class="card border-0 shadow-sm">
+      <div class="card-header bg-light">
+          <h5>Enrolled Subjects</h5>
+      </div>
+      <div class="card-body">
+          <table class="table">
+              <thead>
+                  <tr>
+                      <th scope="col">Subject Code</th>
+                      <th scope="col">Subject Title</th>
+                      <th scope="col">Schedule</th>
+                      <th scope="col">Units</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                      <td>CS101</td>
+                      <td>Introduction to Computer Science</td>
+                      <td>Mon/Wed 8:00 AM - 10:00 AM</td>
+                      <td>3</td>
+                  </tr>
+                  <tr>
+                      <td>CS102</td>
+                      <td>Data Structures</td>
+                      <td>Tue/Thu 10:00 AM - 12:00 PM</td>
+                      <td>3</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+  </div>
+</div>
+{% endblock %}

@@ -21,8 +21,11 @@ from authentication import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.login, name='login'),
+    path('login_student/', views.login_student, name='student-login'),
     path('home/', views.home, name='home'),
     path("home/", include("admin_dashboard.urls")),
+    path('student_home/', views.student_home, name='student_home'),
+    path("student_home/", include("student_dashboard.urls")),
     path('', include('authentication.urls')),
 ]
 

@@ -1,0 +1,99 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h4 class="mb-3">Masterlist of Students</h4>
+
+    <!-- Filters and Search Box -->
+    <div class="row mb-4 align-items-end">
+        <div class="col-md-3">
+            <label for="searchInput" class="form-label"></label>
+            <div class="input-group">
+                <input type="text" id="searchInput" class="form-control" placeholder="Enter name">
+                <button type="button" class="search-btn" onclick="searchStudent()">Search</button>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label for="sectionFilter" class="form-label"></label>
+            <select id="sectionFilter" class="form-select">
+                <option value="">Select Sections</option>
+                <option value="A">Section A</option>
+                <option value="B">Section B</option>
+                <option value="C">Section C</option>
+                <option value="D">Section D</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="yearFilter" class="form-label"></label>
+            <select id="yearFilter" class="form-select">
+                <option value="">Select Years</option>
+                <option value="Year 1">Year 1</option>
+                <option value="Year 2">Year 2</option>
+                <option value="Year 3">Year 3</option>
+                <option value="Year 4">Year 4</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="courseFilter" class="form-label"></label>
+            <select id="courseFilter" class="form-select">
+                <option value="">Select Courses</option>
+                <option value="BS Computer Science">BS Computer Science</option>
+                <option value="BS Information Technology">BS Information Technology</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Masterlist Table -->
+    <div class="table-responsive mt-3">
+        <table class="table table-striped table-bordered" id="masterlistTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Student ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Course</th>
+                    <th>Year</th>
+                    <th>Section</th> <!-- New column for Section -->
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Sample Data with Sections -->
+                <tr data-year="Year 1" data-course="BS Computer Science" data-section="A">
+                    <td>1</td>
+                    <td>2022001</td>
+                    <td>StudentA1</td>
+                    <td>LastNameA1</td>
+                    <td>BS Computer Science</td>
+                    <td>Year 1</td>
+                    <td>Section A</td> <!-- Section A -->
+                    <td>studenta1@cvsu.edu.ph</td>
+                </tr>
+                <tr data-year="Year 4" data-course="BS Computer Science" data-section="B">
+                    <td>2</td>
+                    <td>2022008</td>
+                    <td>StudentA2</td>
+                    <td>LastNameA4</td>
+                    <td>BS Computer Science</td>
+                    <td>Year 4</td>
+                    <td>Section B</td> <!-- Section B -->
+                    <td>studenta6@cvsu.edu.ph</td>
+                </tr>
+                <tr data-year="Year 2" data-course="BS Information Technology" data-section="C">
+                    <td>3</td>
+                    <td>2022002</td>
+                    <td>StudentB1</td>
+                    <td>LastNameB1</td>
+                    <td>BS Information Technology</td>
+                    <td>Year 2</td>
+                    <td>Section C</td> <!-- Section C -->
+                    <td>studentb1@cvsu.edu.ph</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -27,5 +27,8 @@ urlpatterns = [
     path('student_home/', views.student_home, name='student_home'),
     path("student_home/", include("student_dashboard.urls")),
     path('', include('authentication.urls')),
+    path('login/', views.login, name='login'),
+    path('', include('authentication.urls')),
+    path('', include("admin_dashboard.urls")),
 ]
 

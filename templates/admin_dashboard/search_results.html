@@ -54,7 +54,7 @@
                 </tr>
             </thead>
             <tbody>
-
+                
                 {% for info in search_results %}
                 <tr>
                     <td>{{ info.studentnumber }}</td>
@@ -65,10 +65,10 @@
                     <td>{{ info.sectionyear }} - {{ info.section }}</td> <!-- Section A -->
                     <td>{{ info.email }}</td>
                     <td style="text-align: center;"><a class="btn btn-primary" href="/edit_info/{{ info.studentnumber }}">Edit</a></td>
-                    <td style="text-align: center;"><a class="btn btn-primary" href="/print_cor/{{ info.studentnumber }}">Enroll</button></td>
+                    <td style="text-align: center;"><a class="btn btn-primary" href="/process_cor/{{ info.studentnumber }}">Enroll</button></td>
                 </tr>
                 {% endfor %}
-
+                
             </tbody>
         </table>
     </div>

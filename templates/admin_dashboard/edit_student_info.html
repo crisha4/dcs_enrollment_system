@@ -1,0 +1,132 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="mb-3">
+        <h4>Edit Information</h4>
+        <div>
+            <!-- Student Enrollment Form -->
+              <!-- Personal Information -->
+            <div class="card mb-3">
+                <form method="post" action='/update_info/{{ enrolled_student.studentnumber }}'>
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+                            <div class="col-md-2">
+                                {% csrf_token %}
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" name="last_name" value="{{ enrolled_student.lastname }}" required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" name="first_name" value="{{ enrolled_student.firstname }}"  required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="middleName" class="form-label">Middle Name</label>
+                                <input type="text" class="form-control" name="middle_name" value="{{ enrolled_student.middlename }}" required>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-4">
+                                <label for="yearlevel" class="form-label">Year Level</label>
+                                <select id="yearlevel" class="form-select" name="yearlevel" value="{{ enrolled_student.year }}" required>
+                                    <option value="1st Year">1st Year</option>
+                                    <option value="2nd Year">2nd Year</option>
+                                    <option value="3rd Year">3rd Year</option>
+                                    <option value="4th Year">4th Year</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="suffix" class="form-label">Suffix</label>
+                                <input type="text" class="form-control" name="suffix" value="{{ enrolled_student.suffix }}"  placeholder="e.g., Jr., Sr., III">
+                            </div>
+
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-4">
+                                <label for="gender" class="form-label">Gender</label>
+                                <select id="gender" class="form-select" name="gender" value="{{ enrolled_student.gender }}">
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="contactNumber" class="form-label">Contact Number</label>
+                                <input type="tel" class="form-control" name="contactNumber" value="{{ enrolled_student.contact }}" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" name="email" value="{{ enrolled_student.email }}" required>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" name="Address" value="{{ enrolled_student.address }}" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                    <!-- Enrollment Details -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h5>Enrollment Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="studentType" class="form-label">Student Type</label>
+                                    <select id="studentType" class="form-select" name="studentType" value="{{ enrolled_student.new_or_old }}" required>
+                                        <option value="new">New</option>
+                                        <option value="old">Old</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select id="status" class="form-select" name="status" value="{{ enrolled_student.status }}" required>
+                                        <option value="regular">Regular</option>
+                                        <option value="irregular">Irregular</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="course" class="form-label">Course</label>
+                                    <select id="course" class="form-select" name="course" value="{{ enrolled_student.course }}" required>
+                                        <option value="BSCS">BSCS</option>
+                                        <option value="BSIT">BSIT</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-4">
+                                    <label for="major" class="form-label">Major</label>
+                                    <input type="text" class="form-control" name="major" value="{{ enrolled_student.major }}">
+                                </div>
+                            <div class="col-md-4">
+                                <label for="section" class="form-label">Section</label>
+                                <input type="text" class="form-control" name="year_standing" placeholder="Year Standing" value="{{ enrolled_student.sectionyear }}" required>
+                                <br>
+                                <input type="text" class="form-control" name="section" placeholder="section" value="{{ enrolled_student.section }}" required>
+                            </div>
+            
+                            </div>
+                        </div>
+                    
+                    </div>
+        
+                <!-- Submit Button -->
+                <div class="card-footer text-center">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+                
+            </form>
+        </div>
+{% endblock %}

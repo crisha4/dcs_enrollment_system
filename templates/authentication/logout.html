@@ -1,0 +1,23 @@
+{% extends "authentication/base.html" %}
+
+{% load static %}
+
+{% block title %}Enrollment System{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="login-container">
+    <h2>You have been logged out.</h2>
+    <hr>
+    <div class="border-top pt-3">
+      <div class="forgot-link">
+        <a href="{% url 'login' %}">Log In Again</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -34,19 +34,19 @@
                       </a>
                   </li>
                   <li class="sidebar-item">
-                      <a href="{% url 'student-dashboard-profile' %}" class="sidebar-link">
+                      <a href="{% url 'student-profile' %}" class="sidebar-link">
                           <i class="far fa-user pe-2"></i>
                           Profile
                       </a>
                   </li>
                   <li class="sidebar-item">
-                    <a href="{% url 'student-dashboard-status' %}" class="sidebar-link">
+                    <a href="{% url 'student-status' %}" class="sidebar-link">
                         <i class="fas fa-info-circle pe-2"></i>
                         Enrollment Status
                     </a>
                 </li>
                   <li class="sidebar-item">
-                      <a href="{% url 'student-dashboard-cor' %}" class="sidebar-link">
+                      <a href="{% url 'student-cor' %}" class="sidebar-link">
                           <i class="fas fa-file-alt pe-2"></i>
                           View COR
                       </a>
@@ -68,9 +68,12 @@
                                 <i class="fas fa-user me-2"></i> Student
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item">Profile</a>
+                                <a href="{% url 'student-profile' %}" class="dropdown-item">Profile</a>
                                 <a href="#" class="dropdown-item">Setting</a>
-                                <a href="#" class="dropdown-item">Logout</a>
+                                <form action="{% url 'logout' %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                </form>
                             </div>
                         </li>
                     </ul>

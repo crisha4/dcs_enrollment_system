@@ -1,13 +1,26 @@
-from django.shortcuts import render
+from django.shortcuts import render , redirect
 from django.http import HttpResponse
 from .models import student, subjects
 from .cor import generate_cor
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 import datetime
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.utils.crypto import get_random_string
+
 
 allstudents = student.objects.all()
 number_of_students_enrolled = student.objects.all().count()
+
+def home(request):
+    context = {
+        'allstudents':allstudents,
+        'number_of_students_enrolled':number_of_students_enrolled
+    }
+
+    return render(request, 'admin_dashboard/index.html', context)
 
 def admin_profile(request):
     return render(request, "admin_dashboard/profile.html",{})
@@ -48,28 +61,55 @@ def enroll_student(request):
         Status = request.POST.get('status')
         studenttype = request.POST.get('studentType')
 
-        
-        student_info = student(
+        username = f"{last_name.lower()}{first_name.lower()}"
+        password = get_random_string(8)
 
-            studentnumber = year + student_number,
-            firstname = first_name, 
-            lastname = last_name,
-            middlename = middle_name,
-            dateofbirth = Dateofbirth,
-            gender = Gender,
-            suffix = Suffix,
-            contact = contact_info,
-            email = email,
-            address = address,
-            year = studentyear,
-            sectionyear = Sectionyear,
-            section = Section,
-            course = Course,
-            major = Major,
-            status = Status,
-            new_or_old = studenttype 
+        try:
+            user = User.objects.create_user(
+                username = username,
+                email = email,
+                first_name = first_name,
+                last_name = last_name,
+                password = password,
             )
-        student_info.save()
+            user.is_staff = False
+            user.is_superuser = False
+            user.save()
+        
+            student_info = student.objects.create(
+                user = user,
+                studentnumber = year + student_number,
+                firstname = first_name, 
+                lastname = last_name,
+                middlename = middle_name,
+                dateofbirth = Dateofbirth,
+                gender = Gender,
+                suffix = Suffix,
+                contact = contact_info,
+                email = email,
+                address = address,
+                year = studentyear,
+                sectionyear = Sectionyear,
+                section = Section,
+                course = Course,
+                major = Major,
+                status = Status,
+                new_or_old = studenttype,
+                )
+            student_info.save()
+
+            send_mail(
+                subject="Your Enrollment Account Details",
+                message=f"Hello {first_name},\n\nYour account has been created.\nUsername: {username}\nPassword: {password}\n\nPlease log in and change your password immediately.",
+                from_email="enrollmentdcsnoreply@gmail.com",
+                recipient_list = [email],
+                fail_silently=False,
+            )
+
+            messages.success(request, f"Student enrolled successfully and email sent! The generated password is {password}")
+            return redirect('admin_dashboard')
+        except Exception as e:
+            messages.error(request, f"Error enrolling student: {e}")
 
         return HttpResponse("Data successfully updated!")
     else:

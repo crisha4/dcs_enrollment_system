@@ -11,12 +11,12 @@
 <div class="card-body">
 <div class="d-flex align-items-center">
     <div class="ms-3">
-        <h5>Crisha Miranda</h5>
+        <h5>{{ user.first_name }}</h5>
         <p>Admin</p>
-        <p>Email: adminblahblah@cvsu.edu</p>
-        <p>Phone: +123456789</p>
-        <p>Joined: January 1, 2023</p>
-        <p>Last Login: December 2, 2024</p>
+        <p>Email: {{ user.email|default:'N/A' }}</p>
+        <p>Phone: N/A</p>
+        <p>Joined: {{ user.date_joined|default:'N/A' }}</p>
+        <p>Last Login: {{ user.last_login|default:'N/A' }}</p>
     </div>
 </div>
 </div>

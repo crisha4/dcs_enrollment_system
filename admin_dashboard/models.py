@@ -1,7 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class student(models.Model):
-
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     studentnumber = models.CharField(max_length=100, null=True)
     firstname = models.CharField(max_length=100, null=True)
     middlename = models.CharField(max_length=100, null=True)

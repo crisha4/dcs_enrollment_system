@@ -39,6 +39,13 @@
     </div>
     </form>
 
+    <!-- Warning message -->
+    {% if warning_message %}
+    <div class="alert alert-warning" role="alert">
+        {{ warning_message }}
+    </div>
+    {% endif %}
+    
     <!-- Masterlist Table -->
     <div class="table-responsive mt-3">
         <table class="table table-striped table-bordered" id="masterlistTable">
@@ -54,20 +61,35 @@
                 </tr>
             </thead>
             <tbody>
-
-                {% for info in search_results %}
-                <tr>
-                    <td>{{ info.studentnumber }}</td>
-                    <td>{{ info.firstname }}</td>
-                    <td>{{ info.lastname }}</td>
-                    <td>{{ info.course }}</td>
-                    <td>{{ info.year }}</td>
-                    <td>{{ info.sectionyear }} - {{ info.section }}</td> <!-- Section A -->
-                    <td>{{ info.email }}</td>
-                    <td style="text-align: center;"><a class="btn btn-primary" href="/edit_info/{{ info.studentnumber }}">Edit</a></td>
-                    <td style="text-align: center;"><a class="btn btn-primary" href="/print_cor/{{ info.studentnumber }}">Enroll</button></td>
-                </tr>
-                {% endfor %}
+                {% if search_results %}
+                    {% for info in search_results %}
+                    <tr>
+                        <td>{{ info.studentnumber }}</td>
+                        <td>{{ info.firstname }}</td>
+                        <td>{{ info.lastname }}</td>
+                        <td>{{ info.course }}</td>
+                        <td>{{ info.year }}</td>
+                        <td>{{ info.sectionyear }} - {{ info.section }}</td> <!-- Section A -->
+                        <td>{{ info.email }}</td>
+                        <td style="text-align: center;"><a class="btn btn-primary" href="/admin_dashboard/edit_info/{{ info.studentnumber }}">Edit</a></td>
+                        <td style="text-align: center;"><a class="btn btn-primary" href="/admin_dashboard/process_cor/{{ info.studentnumber }}">Enroll</button></td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    {% for info in allstudents %}
+                    <tr>
+                        <td>{{ info.studentnumber }}</td>
+                        <td>{{ info.firstname }}</td>
+                        <td>{{ info.lastname }}</td>
+                        <td>{{ info.course }}</td>
+                        <td>{{ info.year }}</td>
+                        <td>{{ info.sectionyear }} - {{ info.section }}</td> <!-- Section A -->
+                        <td>{{ info.email }}</td>
+                        <td style="text-align: center;"><a class="btn btn-primary" href="/admin_dashboard/edit_info/{{ info.studentnumber }}">Edit</a></td>
+                        <td style="text-align: center;"><a class="btn btn-primary" href="/admin_dashboard/process_cor/{{ info.studentnumber }}">Enroll</button></td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
 
             </tbody>
         </table>

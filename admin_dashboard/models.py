@@ -25,7 +25,7 @@ class student(models.Model):
     class Meta:
         db_table = 'students'
 
-class subjects(models.Model):
+class subject(models.Model):
     
     course_code = models.CharField(max_length=50, null=True)
     course_description = models.CharField(max_length=50, null=True)

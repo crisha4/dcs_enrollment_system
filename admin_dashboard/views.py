@@ -1,6 +1,6 @@
 from django.shortcuts import render , redirect
 from django.http import HttpResponse
-from .models import student, subjects
+from .models import student, subject
 from .cor import generate_cor
 from django.template.loader import get_template
 from xhtml2pdf import pisa
@@ -140,7 +140,7 @@ def process_cor(request, student_number):
 
     template = get_template('admin_dashboard/process_cor.html')
     enrolled_student = student.objects.get(studentnumber=student_number)
-    subject_code = subjects.objects.order_by('course_code')
+    subject_code = subject.objects.order_by('course_code')
     current_school_year = datetime.date.today().year
     previous_school_year = datetime.date.today().year - 1
     next_school_year = datetime.date.today().year + 1
@@ -242,16 +242,16 @@ def print_cor(request, student_number):
                 'status': status,
                 'date_enrolled': date_enrolled,
 
-                'subject1': subjects.objects.filter(course_code=subject1).values(),
-                'subject2': subjects.objects.filter(course_code=subject2).values(),
-                'subject3': subjects.objects.filter(course_code=subject3).values(),
-                'subject4': subjects.objects.filter(course_code=subject4).values(),
-                'subject5': subjects.objects.filter(course_code=subject5).values(),
-                'subject6': subjects.objects.filter(course_code=subject6).values(),
-                'subject7': subjects.objects.filter(course_code=subject7).values(),
-                'subject8': subjects.objects.filter(course_code=subject8).values(),
-                'subject9': subjects.objects.filter(course_code=subject9).values(),
-                'subject10': subjects.objects.filter(course_code=subject10).values(),
+                'subject1': subject.objects.filter(course_code=subject1).values(),
+                'subject2': subject.objects.filter(course_code=subject2).values(),
+                'subject3': subject.objects.filter(course_code=subject3).values(),
+                'subject4': subject.objects.filter(course_code=subject4).values(),
+                'subject5': subject.objects.filter(course_code=subject5).values(),
+                'subject6': subject.objects.filter(course_code=subject6).values(),
+                'subject7': subject.objects.filter(course_code=subject7).values(),
+                'subject8': subject.objects.filter(course_code=subject8).values(),
+                'subject9': subject.objects.filter(course_code=subject9).values(),
+                'subject10': subject.objects.filter(course_code=subject10).values(),
 
                 'allsubjects': ['subject1', 'subject2', 'subject3', 'subject4', 'subject5', 'subject6', 'subject7', 'subject8', 'subject9', 'subject10']
 

@@ -1,0 +1,49 @@
+<div class="modal fade" id="subjectModal" tabindex="-1" aria-labelledby="subjectModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="subjectModalLabel">Add Subject</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form>
+                  <div class="mb-3">
+                      <label for="courseCode" class="form-label">Course Code</label>
+                      <input type="text" class="form-control" id="courseCode" placeholder="Enter course code">
+                  </div>
+                  <div class="mb-3">
+                      <label for="courseName" class="form-label">Course Name</label>
+                      <input type="text" class="form-control" id="courseName" placeholder="Enter course name">
+                  </div>
+                  <div class="mb-3">
+                      <label for="year" class="form-label">Year</label>
+                      <input type="number" class="form-control" id="year" placeholder="Enter year">
+                  </div>
+                  <div class="mb-3">
+                      <label for="semester" class="form-label">Semester</label>
+                      <select class="form-select" id="semester">
+                          <option value="1">First</option>
+                          <option value="2">Second</option>
+                      </select>
+                  </div>
+                  <div class="mb-3">
+                      <label for="lectureCredit" class="form-label">Lecture Credit</label>
+                      <input type="number" class="form-control" id="lectureCredit" placeholder="Enter lecture credit">
+                  </div>
+                  <div class="mb-3">
+                      <label for="labCredit" class="form-label">Laboratory Credit</label>
+                      <input type="number" class="form-control" id="labCredit" placeholder="Enter lab credit">
+                  </div>
+                  <div class="mb-3">
+                      <label for="prerequisite" class="form-label">Prerequisite</label>
+                      <input type="text" class="form-control" id="prerequisite" placeholder="Enter prerequisite">
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save</button>
+          </div>
+      </div>
+  </div>
+</div>

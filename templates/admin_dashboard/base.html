@@ -72,8 +72,8 @@
                                 <i class="fas fa-user me-2"></i> User
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item">Profile</a>
-                                <a href="#" class="dropdown-item">Setting</a>
+                                <a href="{% url 'admin-dashboard-profile' %}" class="dropdown-item">Profile</a>
+                                <a href="{% url 'admin_config' %}" class="dropdown-item">Configuration</a>
                                 <form action="{% url 'logout' %}" method="post">
                                     {% csrf_token %}
                                     <button type="submit" class="dropdown-item">Logout</button>
@@ -86,6 +86,7 @@
 
             <main class="content px-3 py-2">
                 {% block content %} {% endblock %}
+                {% block modal %} {% endblock %}
             </main>
 
             <footer class="footer">

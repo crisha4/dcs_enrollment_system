@@ -32,7 +32,8 @@ def admin_enrollment(request):
     return render(request, "admin_dashboard/student-enrollment.html",{})
 def admin_checklist(request):
     return render(request, "admin_dashboard/checklist.html",{})
-
+def admin_config(request):
+    return render(request, "admin_dashboard/config.html", {})
 
 def enroll_student(request):
 

@@ -15,4 +15,5 @@ urlpatterns = [
     path("print_cor/<str:student_number>", views.print_cor, name='print_cor'),
     path("enroll_student/", views.enroll_student, name='enroll_student'),
     path("search_students/", views.search_students, name='search_students'),
+    path("configure/", views.admin_config, name="admin_config"),
 ]

@@ -25,13 +25,39 @@ class student(models.Model):
     class Meta:
         db_table = 'students'
 
-class subject(models.Model):
+class Subject(models.Model):
     
-    course_code = models.CharField(max_length=50, null=True)
-    course_description = models.CharField(max_length=50, null=True)
+    course_code = models.CharField(max_length=10, unique=True, null=True)
+    course_title = models.CharField(max_length=100, null=True)
+    year = models.IntegerField(choices=[
+        (1, 'First Year'),
+        (2, 'Second Year'),
+        (3, 'Third Year'),
+        (4, 'Fourth Year')
+        ], null=True)
+    semester = models.IntegerField(choices=[
+        (1, 'First Semester'),
+        (2, 'Second Semester')
+        ], null=True)
     subject_units_lec = models.IntegerField(null=True)
     subject_units_lab = models.IntegerField(null=True)
+    prerequisite = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='dependent_subjects'
+    )
 
-    class Meta:
-        db_table = 'subject'
+    def __str__(self):
+        return self.course_code
+    
+class Instructor(models.Model):
+    name = models.CharField(max_length=100, null=True)
+    gender = models.CharField(max_length=1, choices=[('M', 'Male'),('F', 'Female'),('O', 'Other')], null=True)
+    email = models.EmailField(unique=True, null=True)
+    contact = models.CharField(max_length=15, null=True)
+    address = models.TextField(null=True)
 
+    def __str__(self):
+        return self.name

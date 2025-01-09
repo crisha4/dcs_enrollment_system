@@ -1,6 +1,6 @@
-from django.shortcuts import render , redirect
-from django.http import HttpResponse
-from .models import student, subject
+from django.shortcuts import render , redirect, get_object_or_404
+from django.http import HttpResponse,JsonResponse
+from .models import student, Subject, Instructor
 from .cor import generate_cor
 from django.template.loader import get_template
 from xhtml2pdf import pisa
@@ -32,8 +32,75 @@ def admin_enrollment(request):
     return render(request, "admin_dashboard/student-enrollment.html",{})
 def admin_checklist(request):
     return render(request, "admin_dashboard/checklist.html",{})
+
 def admin_config(request):
-    return render(request, "admin_dashboard/config.html", {})
+    subjects = Subject.objects.all()
+    instructors = Instructor.objects.all()
+    return render(request, "admin_dashboard/config.html", {'subjects': subjects,'instructors': instructors})
+
+def save_subject(request):
+    if request.method == 'POST':
+        subject_id = request.POST.get('subject_id')
+        course_code = request.POST['course_code']
+        course_title = request.POST['course_title']
+        year = request.POST['year']
+        semester = request.POST['semester']
+        subject_units_lec = request.POST['subject_units_lec']
+        subject_units_lab = request.POST['subject_units_lab']
+        prerequisite_id = request.POST.get('prerequisite')
+
+        prerequisite = None
+        if prerequisite_id:
+            prerequisite = subject.objects.get(pk=prerequisite_id)
+        
+        if subject_id:
+            subject = Subject.objects.get(pk=subject_id)
+            subject.course_code = course_code
+            subject.course_title = course_title
+            subject.year = year
+            subject.semester = semester
+            subject.subject_units_lec = subject_units_lec
+            subject.subject_units_lab = subject_units_lab
+            subject.prerequisite = prerequisite
+            subject.save()
+        else:
+            Subject.objects.create(
+                course_code=course_code,
+                course_title=course_title,
+                year=year,
+                semester=semester,
+                subject_units_lec=subject_units_lec,
+                subject_units_lab=subject_units_lab,
+                prerequisite=prerequisite
+            )
+        return JsonResponse({'success': True})
+def get_subject(request, subject_id):
+    print(f"Received request for subject ID: {subject_id}")
+    try:
+        subject = Subject.objects.get(pk=subject_id)
+        data ={
+            'id': subject.id,
+            'course_code': subject.course_code,
+            'course_title': subject.course_title,
+            'year': subject.year,
+            'semester': subject.semester,
+            'subject_units_lec': subject.subject_units_lec,
+            'subject_units_lab': subject.subject_units_lab,
+            'prerequisite': subject.prerequisite,
+        }
+        return JsonResponse(data)
+    except Subject.DoesNotExist:
+        return JsonResponse({'error': 'Subject not found'}, status=404)
+    
+def delete_subject(request, subject_id):
+    if request.method == 'DELETE':
+        try:
+            subject = Subject.objects.get(pk=subject_id)
+            subject.delete()
+            return JsonResponse({'success: True'})
+        except Subject.DoesNotExist:
+            return JsonResponse({'error': 'Subject not found'}, status=404)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 def enroll_student(request):
 
@@ -141,7 +208,7 @@ def process_cor(request, student_number):
 
     template = get_template('admin_dashboard/process_cor.html')
     enrolled_student = student.objects.get(studentnumber=student_number)
-    subject_code = subject.objects.order_by('course_code')
+    subject_code = Subject.objects.order_by('course_code')
     current_school_year = datetime.date.today().year
     previous_school_year = datetime.date.today().year - 1
     next_school_year = datetime.date.today().year + 1
@@ -243,16 +310,16 @@ def print_cor(request, student_number):
                 'status': status,
                 'date_enrolled': date_enrolled,
 
-                'subject1': subject.objects.filter(course_code=subject1).values(),
-                'subject2': subject.objects.filter(course_code=subject2).values(),
-                'subject3': subject.objects.filter(course_code=subject3).values(),
-                'subject4': subject.objects.filter(course_code=subject4).values(),
-                'subject5': subject.objects.filter(course_code=subject5).values(),
-                'subject6': subject.objects.filter(course_code=subject6).values(),
-                'subject7': subject.objects.filter(course_code=subject7).values(),
-                'subject8': subject.objects.filter(course_code=subject8).values(),
-                'subject9': subject.objects.filter(course_code=subject9).values(),
-                'subject10': subject.objects.filter(course_code=subject10).values(),
+                'subject1': Subject.objects.filter(course_code=subject1).values(),
+                'subject2': Subject.objects.filter(course_code=subject2).values(),
+                'subject3': Subject.objects.filter(course_code=subject3).values(),
+                'subject4': Subject.objects.filter(course_code=subject4).values(),
+                'subject5': Subject.objects.filter(course_code=subject5).values(),
+                'subject6': Subject.objects.filter(course_code=subject6).values(),
+                'subject7': Subject.objects.filter(course_code=subject7).values(),
+                'subject8': Subject.objects.filter(course_code=subject8).values(),
+                'subject9': Subject.objects.filter(course_code=subject9).values(),
+                'subject10': Subject.objects.filter(course_code=subject10).values(),
 
                 'allsubjects': ['subject1', 'subject2', 'subject3', 'subject4', 'subject5', 'subject6', 'subject7', 'subject8', 'subject9', 'subject10']
 

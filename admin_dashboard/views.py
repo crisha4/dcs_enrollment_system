@@ -74,24 +74,7 @@ def save_subject(request):
                 prerequisite=prerequisite
             )
         return JsonResponse({'success': True})
-def get_subject(request, subject_id):
-    print(f"Received request for subject ID: {subject_id}")
-    try:
-        subject = Subject.objects.get(pk=subject_id)
-        data ={
-            'id': subject.id,
-            'course_code': subject.course_code,
-            'course_title': subject.course_title,
-            'year': subject.year,
-            'semester': subject.semester,
-            'subject_units_lec': subject.subject_units_lec,
-            'subject_units_lab': subject.subject_units_lab,
-            'prerequisite': subject.prerequisite,
-        }
-        return JsonResponse(data)
-    except Subject.DoesNotExist:
-        return JsonResponse({'error': 'Subject not found'}, status=404)
-    
+ 
 def delete_subject(request, subject_id):
     if request.method == 'DELETE':
         try:

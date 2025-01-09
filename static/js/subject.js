@@ -46,8 +46,17 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("subjectUnitsLab").value = subjectUnitsLab || "";
             document.getElementById("prerequisite").value = prerequisite || ""; // Handle null prerequisites
             
+            document.getElementById("subjectModalLabel").textContent = "Edit Subject";
             // Open the modal
             new bootstrap.Modal(document.getElementById("subjectModal")).show();
         });
     });
+    document.getElementById("addSubjectBtn").addEventListener("click", () => {
+        subjectForm.reset();
+        document.getElementById("subjectId").value = ""; // Hidden input
+    
+        document.getElementById("subjectModalLabel").textContent = "Add Subject";
+    
+        new bootstrap.Modal(document.getElementById("subjectModal")).show();
+      });
 });

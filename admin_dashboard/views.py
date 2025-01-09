@@ -83,6 +83,44 @@ def delete_subject(request, subject_id):
     else:
         return redirect('admin_config')
 
+from django.shortcuts import redirect, get_object_or_404
+from .models import Instructor
+
+def save_instructor(request):
+    if request.method == 'POST':
+        instructor_id = request.POST.get('instructor_id')  # Hidden field to identify the instructor
+        name = request.POST.get('instructor_name')
+        gender = request.POST.get('gender')
+        email = request.POST.get('email')
+        contact = request.POST.get('contact')
+        address = request.POST.get('address')
+
+        if instructor_id:  # Edit existing instructor
+            instructor = get_object_or_404(Instructor, id=instructor_id)
+            instructor.name = name
+            instructor.gender = gender
+            instructor.email = email
+            instructor.contact = contact
+            instructor.address = address
+            instructor.save()
+        else:  # Add new instructor
+            Instructor.objects.create(
+                name=name,
+                gender=gender,
+                email=email,
+                contact=contact,
+                address=address
+            )
+
+        return JsonResponse({'success': True})
+
+def delete_instructor(request, instructor_id):
+    if request.method == 'GET':
+        instructor = get_object_or_404(Instructor, id=instructor_id)
+        instructor.delete()
+        return redirect('admin_config')
+    else:
+        return redirect('admin_config')
 def enroll_student(request):
 
     if request.method == 'POST':

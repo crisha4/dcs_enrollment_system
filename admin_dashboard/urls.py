@@ -19,5 +19,6 @@ urlpatterns = [
     path("configure/", views.admin_config, name="admin_config"),
     path('save_subject/', views.save_subject, name='save_subject'),
     path("delete_subject/<str:subject_id>/", views.delete_subject, name='delete_subject'),
-    
+    path('save_instructor/', views.save_instructor, name='save_instructor'),
+    path("delete_instructor/<str:instructor_id>/", views.delete_instructor, name='delete_instructor'),
 ]

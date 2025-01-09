@@ -1,49 +1,51 @@
 <div class="modal fade" id="instructorModal" tabindex="-1" aria-labelledby="instructorModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="instructorModalLabel">Add Instructor</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <form>
-                  <div class="mb-3">
-                      <label for="instructorName" class="form-label">Name</label>
-                      <input type="text" class="form-control" id="instructorName" placeholder="Enter instructor's name">
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label">Gender</label><br>
-                    <div>
-                        <input type="radio" id="male" name="gender" value="M" required>
-                        <label for="male">Male</label>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="instructorModalLabel">Add Instructor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="instructorForm" action="{% url 'save_instructor' %}" method="POST" data-url="{% url 'save_instructor' %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="instructorId" name="instructor_id">
+                    <div class="mb-3">
+                        <label for="instructorName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="instructorName" name="instructor_name" placeholder="Enter instructor's name">
                     </div>
-                    <div>
-                        <input type="radio" id="female" name="gender" value="F">
-                        <label for="female">Female</label>
+                    <div class="mb-3">
+                        <label class="form-label">Gender</label><br>
+                        <div>
+                            <input type="radio" id="male" name="gender" value="M" required>
+                            <label for="male">Male</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="female" name="gender" value="F">
+                            <label for="female">Female</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="other" name="gender" value="O">
+                            <label for="other">Other</label>
+                        </div>
                     </div>
-                    <div>
-                        <input type="radio" id="other" name="gender" value="O">
-                        <label for="other">Other</label>
+                    <div class="mb-3">
+                        <label for="instructorEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="instructorEmail" name="email" placeholder="Enter email">
                     </div>
-                  </div>
-                  <div class="mb-3">
-                      <label for="instructorEmail" class="form-label">Email</label>
-                      <input type="email" class="form-control" id="instructorEmail" placeholder="Enter email">
-                  </div>
-                  <div class="mb-3">
-                      <label for="instructorContact" class="form-label">Contact No.</label>
-                      <input type="text" class="form-control" id="instructorContact" placeholder="Enter contact number">
-                  </div>
-                  <div class="mb-3">
-                      <label for="instructorAddress" class="form-label">Address</label>
-                      <textarea class="form-control" id="instructorAddress" rows="3" placeholder="Enter address"></textarea>
-                  </div>
-              </form>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save</button>
-          </div>
-      </div>
-  </div>
+                    <div class="mb-3">
+                        <label for="instructorContact" class="form-label">Contact No.</label>
+                        <input type="text" class="form-control" id="instructorContact" name="contact" placeholder="Enter contact number">
+                    </div>
+                    <div class="mb-3">
+                        <label for="instructorAddress" class="form-label">Address</label>
+                        <textarea class="form-control" id="instructorAddress" rows="3" name="address" placeholder="Enter address"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" form="instructorForm" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
 </div>

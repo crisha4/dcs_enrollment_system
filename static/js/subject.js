@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Handle form submission
     const subjectForm = document.getElementById('subjectForm');
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     subjectForm.addEventListener('submit', function (e) {
         e.preventDefault();
         const formData = new FormData(subjectForm);
@@ -56,17 +57,23 @@ document.addEventListener("DOMContentLoaded", () => {
         button.addEventListener("click", () => {
             const subjectId = button.getAttribute("data-id");
             if (confirm("Are you sure you want to delete this subject?")) {
-                fetch("{% url 'delete_subject' 1 %}".replace('1', subjectId), {
+                fetch(`/admin_dashboard/delete_subject/${subjectId}/`, {
                     method: "DELETE",
                     headers: {
-                        "X-CSRFToken": "{{ csrf_token }}"
+                        "X-CSRFToken": csrftoken,
                     }
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        alert("Subject deleted successfully.");
                         location.reload(); // Refresh page
+                    }else {
+                        alert("Failed to delete subject.");
                     }
+                })
+                .catch(error => {
+                    console.error("Error deleting subject:", error);
                 });
             }
         });

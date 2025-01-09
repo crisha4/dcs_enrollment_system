@@ -76,14 +76,12 @@ def save_subject(request):
         return JsonResponse({'success': True})
  
 def delete_subject(request, subject_id):
-    if request.method == 'DELETE':
-        try:
-            subject = Subject.objects.get(pk=subject_id)
-            subject.delete()
-            return JsonResponse({'success: True'})
-        except Subject.DoesNotExist:
-            return JsonResponse({'error': 'Subject not found'}, status=404)
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
+    if request.method == 'GET':
+        subject = get_object_or_404(Subject, id=subject_id)
+        subject.delete()
+        return redirect('admin_config')
+    else:
+        return redirect('admin_config')
 
 def enroll_student(request):
 

@@ -11,6 +11,7 @@ from django.core.mail import send_mail
 from django.utils.crypto import get_random_string
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 
 allstudents = student.objects.all()
@@ -36,9 +37,16 @@ def admin_checklist(request):
     return render(request, "admin_dashboard/checklist.html",{})
 
 def admin_config(request):
-    subjects = Subject.objects.all()
+    subject_list = Subject.objects.all().prefetch_related('prerequisite')
+    paginator = Paginator(subject_list, 10)  # Show 10 subjects per page
+
+    page_number = request.GET.get('page')
+    subjects = paginator.get_page(page_number)
     instructors = Instructor.objects.all()
-    return render(request, "admin_dashboard/config.html", {'subjects': subjects,'instructors': instructors})
+    context = {'subjects': subjects, 'instructors': instructors}
+    
+    # return render(request, "admin_dashboard/config.html", {'subjects': subjects,'instructors': instructors})
+    return render(request, "admin_dashboard/config.html", context)
 
 @login_required
 def save_subject(request):

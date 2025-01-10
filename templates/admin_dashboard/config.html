@@ -44,7 +44,7 @@
                 {% for instructor in instructors %}
                 <tr>
                   <td>{{ instructor.name }}</td>
-                  <td>{{ instructor.gender }}</td>
+                  <td>{{ instructor.get_gender_display }}</td>
                   <td>{{ instructor.email }}</td>
                   <td>{{ instructor.contact }}</td>
                   <td>{{ instructor.address }}</td>
@@ -53,7 +53,7 @@
                       <button class="btn btn-primary btn-sm edit-instructor-btn" 
                         data-id="{{ instructor.id }}"
                         data-name="{{ instructor.name }}"
-                        data-gender="{{ instructor.get_gender_display }}"
+                        data-gender="{{ instructor.gender }}"
                         data-email="{{ instructor.email }}"
                         data-contact ="{{ instructor.contact }}"
                         data-address="{{ instructor.address }}">

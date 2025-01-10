@@ -49,7 +49,7 @@
                         <select class="form-select" id="prerequisite" name="prerequisites" multiple>
                             <option value="" selected>None</option>
                             {% for subject in subjects %}
-                                <option value="{{ subject.id }}">{{ subject.course_code }}</option>
+                                <option value="{{ subject.id }}">{{ subject }}</option>
                             {% endfor %}
                         </select>
                         <small class="text-muted">Hold down Ctrl (Windows) or Cmd (Mac) to select multiple options.</small>

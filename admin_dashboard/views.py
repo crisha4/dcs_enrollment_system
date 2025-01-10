@@ -9,6 +9,8 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.utils.crypto import get_random_string
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 
 allstudents = student.objects.all()
@@ -38,6 +40,7 @@ def admin_config(request):
     instructors = Instructor.objects.all()
     return render(request, "admin_dashboard/config.html", {'subjects': subjects,'instructors': instructors})
 
+@login_required
 def save_subject(request):
     if request.method == 'POST':
         subject_id = request.POST.get('subject_id')
@@ -47,33 +50,41 @@ def save_subject(request):
         semester = request.POST['semester']
         subject_units_lec = request.POST['subject_units_lec']
         subject_units_lab = request.POST['subject_units_lab']
-        prerequisite_id = request.POST.get('prerequisite')
+        prerequisites = request.POST.getlist('prerequisites')
 
-        prerequisite = None
-        if prerequisite_id:
-            prerequisite = subject.objects.get(pk=prerequisite_id)
+        # prerequisite = None
+        # if prerequisite_id:
+        #     prerequisite = subject.objects.get(pk=prerequisite_id)
         
         if subject_id:
-            subject = Subject.objects.get(pk=subject_id)
+            subject = get_object_or_404(Subject, id=subject_id)
             subject.course_code = course_code
             subject.course_title = course_title
             subject.year = year
             subject.semester = semester
             subject.subject_units_lec = subject_units_lec
             subject.subject_units_lab = subject_units_lab
-            subject.prerequisite = prerequisite
+            # subject.prerequisite = prerequisite
             subject.save()
+            subject.prerequisite.set(prerequisites)
+            success = True
         else:
-            Subject.objects.create(
+            subject = Subject.objects.create(
                 course_code=course_code,
                 course_title=course_title,
                 year=year,
                 semester=semester,
                 subject_units_lec=subject_units_lec,
-                subject_units_lab=subject_units_lab,
-                prerequisite=prerequisite
+                subject_units_lab=subject_units_lab
+                # prerequisite=prerequisite
             )
-        return JsonResponse({'success': True})
+            subject.prerequisite.set(prerequisites)
+            success = True
+        
+        if success:
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'error': 'An error occurred while saving the subject.'})
  
 def delete_subject(request, subject_id):
     if request.method == 'GET':

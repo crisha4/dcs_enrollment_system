@@ -33,6 +33,7 @@
                           <option value="" selected disabled>Choose semester</option>
                           <option value="1">First Semester</option>
                           <option value="2">Second Semester</option>
+                          <option value="3">Midyear</option>
                       </select>
                   </div>
                   <div class="mb-3">
@@ -45,12 +46,13 @@
                   </div>
                   <div class="mb-3">
                         <label for="prerequisite" class="form-label">Prerequisite</label>
-                        <select class="form-select" id="prerequisite" name="prerequisite">
+                        <select class="form-select" id="prerequisite" name="prerequisites" multiple>
                             <option value="" selected>None</option>
                             {% for subject in subjects %}
                                 <option value="{{ subject.id }}">{{ subject.course_code }}</option>
                             {% endfor %}
                         </select>
+                        <small class="text-muted">Hold down Ctrl (Windows) or Cmd (Mac) to select multiple options.</small>
                     </div>
               </form>
           </div>

@@ -5,11 +5,16 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         const formData = new FormData(subjectForm);
         formData.append("subject_id", document.getElementById("subjectId").value || "");
+        
+        const prerequisites = Array.from(document.getElementById("prerequisite").selectedOptions).map(option => option.value);
+        prerequisites.forEach(prereq => {
+            formData.append("prerequisites", prereq);
+        });
 
         fetch(subjectForm.getAttribute('action'), {
             method: "POST",
             headers: {
-                "X-CSRFToken": "{{ csrf_token }}"
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
             },
             body: formData
         })
@@ -44,7 +49,21 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("semester").value = semester || "";
             document.getElementById("subjectUnitsLec").value = subjectUnitsLec || "";
             document.getElementById("subjectUnitsLab").value = subjectUnitsLab || "";
-            document.getElementById("prerequisite").value = prerequisite || ""; // Handle null prerequisites
+            
+            const prerequisiteSelect = document.getElementById("prerequisite");
+            Array.from(prerequisiteSelect.options).forEach(option => {
+                option.selected = false;
+            });
+
+            if (prerequisite) {
+                const prereqIds = prerequisite.split(',').map(id => id.trim());
+                prereqIds.forEach(id => {
+                    const option = prerequisiteSelect.querySelector(`option[value="${id}"]`);
+                    if (option) {
+                        option.selected = true;
+                    }
+                });
+            }
             
             document.getElementById("subjectModalLabel").textContent = "Edit Subject";
             // Open the modal
@@ -54,7 +73,12 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("addSubjectBtn").addEventListener("click", () => {
         subjectForm.reset();
         document.getElementById("subjectId").value = ""; // Hidden input
-    
+        
+        const prerequisiteSelect = document.getElementById("prerequisite");
+        Array.from(prerequisiteSelect.options).forEach(option => {
+            option.selected = false;
+        });
+
         document.getElementById("subjectModalLabel").textContent = "Add Subject";
     
         new bootstrap.Modal(document.getElementById("subjectModal")).show();

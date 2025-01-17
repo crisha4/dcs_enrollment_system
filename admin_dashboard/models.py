@@ -34,3 +34,13 @@ class subjects(models.Model):
     class Meta:
         db_table = 'subject'
 
+class school_fees(models.Model):
+
+    school_fee_name = models.CharField(max_length=50, null=True)
+    school_fee_value = models.DecimalField(max_digits=6, decimal_places=2, null=True)
+
+    class Meta:
+        db_table = 'school_fee'
+
+
+    

@@ -33,15 +33,7 @@
                         </div>
 
                         <div class="row mt-3">
-                            <div class="col-md-4">
-                                <label for="yearlevel" class="form-label">Year Level</label>
-                                <select id="yearlevel" class="form-select" name="yearlevel" value="{{ enrolled_student.year }}" required>
-                                    <option value="1st Year">1st Year</option>
-                                    <option value="2nd Year">2nd Year</option>
-                                    <option value="3rd Year">3rd Year</option>
-                                    <option value="4th Year">4th Year</option>
-                                </select>
-                            </div>
+
                             <div class="col-md-4">
                                 <label for="suffix" class="form-label">Suffix</label>
                                 <input type="text" class="form-control" name="suffix" value="{{ enrolled_student.suffix }}"  placeholder="e.g., Jr., Sr., III">
@@ -83,37 +75,60 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
+
+                                <div class="col-md-2">
+                                    <label for="student_number" class="form-label">Student Number</label>
+                                    <input type="text" class="form-control" name="studentnumber" value="{{ enrolled_student.studentnumber }}" required>
+                                </div>
+
                                 <div class="col-md-4">
                                     <label for="studentType" class="form-label">Student Type</label>
                                     <select id="studentType" class="form-select" name="studentType" value="{{ enrolled_student.new_or_old }}" required>
-                                        <option value="new">New</option>
-                                        <option value="old">Old</option>
+                                        <option value="{{ enrolled_student.new_or_old }}" selected hidden>{{ enrolled_student.new_or_old }}</option>
+                                        <option value="New">New</option>
+                                        <option value="Old">Old</option>
                                     </select>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="status" class="form-label">Status</label>
-                                    <select id="status" class="form-select" name="status" value="{{ enrolled_student.status }}" required>
-                                        <option value="regular">Regular</option>
-                                        <option value="irregular">Irregular</option>
-                                    </select>
-                                </div>
+                        
                                 <div class="col-md-4">
                                     <label for="course" class="form-label">Course</label>
                                     <select id="course" class="form-select" name="course" value="{{ enrolled_student.course }}" required>
+                                        <option value="{{ enrolled_student.course }}" selected hidden>{{ enrolled_student.course }}</option>
                                         <option value="BSCS">BSCS</option>
                                         <option value="BSIT">BSIT</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="row mt-3">
-                                <div class="col-md-4">
-                                    <label for="major" class="form-label">Major</label>
-                                    <input type="text" class="form-control" name="major" value="{{ enrolled_student.major }}">
-                                </div>
+
                             <div class="col-md-4">
-                                <label for="section" class="form-label">Section</label>
-                                <input type="text" class="form-control" name="year_standing" placeholder="Year Standing" value="{{ enrolled_student.sectionyear }}" required>
+                                <label for="major" class="form-label">Major</label>
+                                <input type="text" class="form-control" name="major" value="{{ enrolled_student.major }}">
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label for="status" class="form-label">Status</label>
+                                <select id="status" class="form-select" name="status" value="{{ enrolled_student.status }}" required>
+                                    <option value="{{ enrolled_student.status }}" selected hidden>{{ enrolled_student.status }}</option>
+                                    <option value="Regular">Regular</option>
+                                    <option value="Irregular">Irregular</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="yearstanding" class="form-label">Year Standing</label>
+                                <select id="year_standing" class="form-select" name="year_standing" required>
+                                    <option value="{{ enrolled_student.sectionyear }}" selected hidden>{{ enrolled_student.sectionyear }}</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
                                 <br>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="section_label" class="form-label">Section</label>
                                 <input type="text" class="form-control" name="section" placeholder="section" value="{{ enrolled_student.section }}" required>
                             </div>
             

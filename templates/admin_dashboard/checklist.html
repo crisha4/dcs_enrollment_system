@@ -1,0 +1,221 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Student Checklist</h4>
+        <div class="input-group" style="max-width: 300px;">
+            <input type="text" class="form-control" placeholder="Search students...">
+            <button class="btn btn-outline-secondary" type="button">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+                        
+    <div class="mb-3">
+        <div>
+            <label class="fw-bold">Student ID:</label>
+            <span>202212345</span>
+        </div>
+        <div>
+            <label class="fw-bold">Student Name:</label>
+            <span>Salazar, John</span>
+        </div>
+        <div>
+            <label class="fw-bold">Year Level:</label>
+            <span>3rd Year</span>
+        </div>
+        <div>
+            <label class="fw-bold">Course & Section:</label>
+            <span>BSCS 3-3</span>
+        </div>
+    </div>
+    
+    <div class="mb-3">
+        <input type="text" class="form-control" placeholder="Search...">
+        <div>
+            <!-- First Year - First Semester -->
+            <h5 class="mt-4">First Year - First Semester</h5>
+            <table class="table table-bordered">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Title</th>
+                        <th>Grade</th>
+                        <th>Instructor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>GNED 02</td>
+                        <td>Ethics</td>
+                        <td>1.50</td>
+                        <td>Mr. Agunod</td>
+                    </tr>
+                    <tr>
+                        <td>CS102</td>
+                        <td>Data Structures</td>
+                        <td>2.00</td>
+                        <td>Ms. Green</td>
+                    </tr>
+                </tbody>
+            </table>
+        
+            <!-- First Year - Second Semester -->
+            <h5 class="mt-4">First Year - Second Semester</h5>
+            <table class="table table-bordered">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Title</th>
+                        <th>Grade</th>
+                        <th>Instructor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CS103</td>
+                        <td>Database Systems</td>
+                        <td>1.50</td>
+                        <td>Mr. Black</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Second Year - Second Semester -->
+            <h5 class="mt-4">Second Year - First Semester</h5>
+            <table class="table table-bordered">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Title</th>
+                        <th>Grade</th>
+                        <th>Instructor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CS103</td>
+                        <td>Database Systems</td>
+                        <td>1.25</td>
+                        <td>Mr. Black</td>
+                    </tr>
+                </tbody>
+            </table>
+        
+            <!-- Second Year - Second Semester -->
+            <h5 class="mt-4">Second Year - Second Semester</h5>
+            <table class="table table-bordered">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Title</th>
+                        <th>Grade</th>
+                        <th>Instructor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CS103</td>
+                        <td>Database Systems</td>
+                        <td>2.00</td>
+                        <td>Mr. Black</td>
+                    </tr>
+                </tbody>
+            </table>
+        
+            <!-- Third Year - Second Semester -->
+            <h5 class="mt-4">Third Year - First Semester</h5>
+            <table class="table table-bordered">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Title</th>
+                        <th>Grade</th>
+                        <th>Instructor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CS103</td>
+                        <td>Database Systems</td>
+                        <td>1.75</td>
+                        <td>Mr. Black</td>
+                    </tr>
+                </tbody>
+            </table>
+        
+            <!-- Third Year - Second Semester -->
+            <h5 class="mt-4">Third Year - Second Semester</h5>
+            <table class="table table-bordered">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Title</th>
+                        <th>Grade</th>
+                        <th>Instructor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CS103</td>
+                        <td>Database Systems</td>
+                        <td>2.25</td>
+                        <td>Mr. Black</td>
+                    </tr>
+                </tbody>
+            </table>
+        
+            <!-- Fourth Year - Second Semester -->
+            <h5 class="mt-4">Fourth Year - First Semester</h5>
+            <table class="table table-bordered">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Title</th>
+                        <th>Grade</th>
+                        <th>Instructor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CS103</td>
+                        <td>Database Systems</td>
+                        <td>3.00</td>
+                        <td>Mr. Black</td>
+                    </tr>
+                </tbody>
+            </table>
+        
+            <!-- Fourth Year - Second Semester -->
+            <h5 class="mt-4">Fourth Year - Second Semester</h5>
+            <table class="table table-bordered">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Title</th>
+                        <th>Grade</th>
+                        <th>Instructor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CS103</td>
+                        <td>Database Systems</td>
+                        <td>1.50</td>
+                        <td>Mr. Black</td>
+                    </tr>
+                    <tr>
+                        <td>MATH102</td>
+                        <td>Calculus</td>
+                        <td>3.00</td>
+                        <td>Dr. White</td>
+                    </tr>
+                </tbody>
+            </table>
+           
+        </div>
+    
+{% endblock %}

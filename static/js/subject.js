@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".edit-btn").forEach(button => {
         button.addEventListener("click", () => {
             // Get data attributes from the button
+            const program = button.getAttribute("data-program");
             const subjectId = button.getAttribute("data-id");
             const courseCode = button.getAttribute("data-code");
             const courseTitle = button.getAttribute("data-title");
@@ -43,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Populate the form fields
             document.getElementById("subjectId").value = subjectId || ""; // Hidden input
+            document.getElementById("program").value = program || "";
             document.getElementById("courseCode").value = courseCode || "";
             document.getElementById("courseTitle").value = courseTitle || "";
             document.getElementById("year").value = year || "";

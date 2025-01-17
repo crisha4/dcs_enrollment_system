@@ -58,6 +58,8 @@
                     <th>Year</th>
                     <th>Section</th> <!-- New column for Section -->
                     <th>Email</th>
+                    <th>Edit</th>
+                    <th>Enroll</th>
                 </tr>
             </thead>
             <tbody>
@@ -67,7 +69,7 @@
                         <td>{{ info.studentnumber }}</td>
                         <td>{{ info.firstname }}</td>
                         <td>{{ info.lastname }}</td>
-                        <td>{{ info.course }}</td>
+                        <td>{{ info.course.name }}</td>
                         <td>{{ info.year }}</td>
                         <td>{{ info.sectionyear }} - {{ info.section }}</td> <!-- Section A -->
                         <td>{{ info.email }}</td>
@@ -81,7 +83,7 @@
                         <td>{{ info.studentnumber }}</td>
                         <td>{{ info.firstname }}</td>
                         <td>{{ info.lastname }}</td>
-                        <td>{{ info.course }}</td>
+                        <td>{{ info.course.name }}</td>
                         <td>{{ info.year }}</td>
                         <td>{{ info.sectionyear }} - {{ info.section }}</td> <!-- Section A -->
                         <td>{{ info.email }}</td>

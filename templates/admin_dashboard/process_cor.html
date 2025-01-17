@@ -11,7 +11,7 @@
               <!-- Personal Information -->
             <div class="card mb-3">
                 
-                <form method="post" action='/admin_dashboard/print_cor/{{ enrolled_student.studentnumber }}'>
+                <form method="post" action='/print_cor/{{ enrolled_student.studentnumber }}'>
                     {% csrf_token %}
 
                     <div class="card-body">
@@ -34,19 +34,9 @@
                                 </select>
                             </div>
                             
-                            <div class="col-md-1">
+                            <div class="col-md-2">
                                 <label for="section" class="form-label">Section</label>
                                 <input type="text" class="form-control" name="section" placeholder="section"required>
-                            </div>
-
-                            <div class="col-md-2">
-                                <label for="yearlevel" class="form-label">Year Level</label>
-                                <select id="yearlevel" class="form-select" name="yearlevel" required>
-                                    <option value="1st Year">1st Year</option>
-                                    <option value="2nd Year">2nd Year</option>
-                                    <option value="3rd Year">3rd Year</option>
-                                    <option value="4th Year">4th Year</option>
-                                </select>
                             </div>
 
                             <div class="col-md-2">
@@ -60,15 +50,15 @@
                             <div class="col-md-2">
                                 <label for="status" class="form-label">Registration Status</label>
                                 <select id="status" class="form-select" name="status" required>
-                                    <option value="regular">Regular</option>
-                                    <option value="irregular">Irregular</option>
+                                    <option value="Regular">Regular</option>
+                                    <option value="Irregular">Irregular</option>
                                 </select>
                             </div>
 
                             <div class="col-md-2">
                                 <label for="schoolyear" class="form-label">School Year</label>
                                 <select id="schoolyear" class="form-select" name="schoolyear" required>
-                                    <option value="{{ current_SY }} - {{next_SY}}">{{ current_SY }} - {{ next_SY }}</option>
+                                    <option value="{{ current_SY }} - {{ next_SY }}">{{ current_SY }} - {{ next_SY }}</option>
                                     <option value="{{ previous_SY }} - {{ current_SY }}">{{ previous_SY }} - {{ current_SY }}</option>
                                 </select>
                             </div>
@@ -82,7 +72,7 @@
 
                         <div class="col-md-2">
                             <select id="subject1" class="form-select" name="subject1">
-                                <option value="">Subject 1</option>
+                                <option value="" selected>Subject 1</option>
                                 {% for code in subject_codes %}
                                 <option value="{{ code.course_code }}">{{ code.course_code }}</option>
                                 {% endfor %}
@@ -91,7 +81,7 @@
 
                         <div class="col-md-2">
                             <select id="subject2" class="form-select" name="subject2">
-                                <option value="">Subject 2</option>
+                                <option value="" selected>Subject 2</option>
                                 {% for code in subject_codes %}
                                 <option value="{{ code.course_code }}">{{ code.course_code }}</option>
                                 {% endfor %}
@@ -99,7 +89,7 @@
                         </div>
                         <div class="col-md-2">
                             <select id="subject3" class="form-select" name="subject3">
-                                <option value="">Subject 3</option>
+                                <option value="" selected>Subject 3</option>
                                 {% for code in subject_codes %}
                                 <option value="{{ code.course_code }}">{{ code.course_code }}</option>
                                 {% endfor %}
@@ -108,7 +98,7 @@
                     
                         <div class="col-md-2">
                             <select id="subject4" class="form-select" name="subject4">
-                                <option value="">Subject 4</option>
+                                <option value="" selected>Subject 4</option>
                                 {% for code in subject_codes %}
                                 <option value="{{ code.course_code }}">{{ code.course_code }}</option>
                                 {% endfor %}
@@ -117,7 +107,7 @@
 
                         <div class="col-md-2">
                             <select id="subject5" class="form-select" name="subject5">
-                                <option value="">Subject 5</option>
+                                <option value="" selected>Subject 5</option>
                                 {% for code in subject_codes %}
                                 <option value="{{ code.course_code }}">{{ code.course_code }}</option>
                                 {% endfor %}
@@ -126,7 +116,7 @@
 
                         <div class="col-md-2">
                             <select id="subject6" class="form-select" name="subject6">
-                                <option value="">Subject 6</option>
+                                <option value="" selected>Subject 6</option>
                                 {% for code in subject_codes %}
                                 <option value="{{ code.course_code }}">{{ code.course_code }}</option>
                                 {% endfor %}
@@ -135,7 +125,7 @@
 
                         <div class="col-md-2">
                             <select id="subject7" class="form-select" name="subject7">
-                                <option value="">Subject 7</option>
+                                <option value="" selected>Subject 7</option>
                                 {% for code in subject_codes %}
                                 <option value="{{ code.course_code }}">{{ code.course_code }}</option>
                                 {% endfor %}
@@ -143,7 +133,7 @@
                         </div>
                         <div class="col-md-2">
                             <select id="subject8" class="form-select" name="subject8">
-                                <option value="">Subject 8</option>
+                                <option value="" selected>Subject 8</option>
                                 {% for code in subject_codes %}
                                 <option value="{{ code.course_code }}">{{ code.course_code }}</option>
                                 {% endfor %}
@@ -152,7 +142,7 @@
                     
                         <div class="col-md-2">
                             <select id="subject9" class="form-select" name="subject9">
-                                <option value="">Subject 9</option>
+                                <option value="" selected>Subject 9</option>
                                 {% for code in subject_codes %}
                                 <option value="{{ code.course_code }}">{{ code.course_code }}</option>
                                 {% endfor %}
@@ -161,13 +151,41 @@
 
                         <div class="col-md-2">
                             <select id="subject10" class="form-select" name="subject10">
-                                <option value="">Subject 10</option>
+                                <option value="" selected>Subject 10</option>
                                 {% for code in subject_codes %}
                                 <option value="{{ code.course_code }}">{{ code.course_code }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                 
+                    </div>
+
+                    <hr>
+
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div class="col-md-2">
+                                <label for="reg-fee" class="form-label">ID Fee</label>
+                                <select id="ID_fee" class="form-select" name="ID_fee"required>
+                                    <option value="0" selected>-</option>
+                                    {% for fee in id_fee %}
+                                    <option value="{{ fee.school_fee_value }}">{{ fee.school_fee_value }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="late-reg" class="form-label">Late Reg</label>
+                                <input type="number" class="form-control" name="late_reg" step="0.01" placeholder="Late Reg">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="other-fees" class="form-label">Other Fees</label>
+                                <input type="number" class="form-control" name="other_fees" step="0.01" placeholder="Other Fees">
+                            </div>
+
+                        </div>
                     </div>
         
                 <div class="card-footer text-center">

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificate of Grades</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .header {
+      text-align: center;
+      font-weight: bold;
+    }
+    .table-custom th {
+      border: 1px solid black;
+    }
+    .table-custom td {
+      border-left: 1px solid black;
+      border-right: 1px solid black;
+    }
+    .table-custom tbody tr {
+      border: none;
+    }
+    .table-custom tbody tr:last-child td {
+      border-bottom: 1px solid black;
+    }
+    .table-custom thead tr th, 
+    .table-custom tbody tr td:first-child {
+      border-left: 1px solid black; /* Left border for first column */
+    }
+    .table-custom tbody tr td {
+      border-top: none; /* Remove top border from tbody rows */
+      border-bottom: none; /* Remove bottom border from tbody rows */
+    }
+    .table-custom {
+      margin-top: 20px;
+    }
+    .remarks {
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+  </style>
+  
+</head>
+<body>
+  <div class="container mt-4">
+    <div class="header mx-auto" style="width: 400px; text-align: center;">
+      <h6>CAVITE STATE UNIVERSITY</h6>
+      <p>Bacoor City Campus</p>
+      <p>Place II Soldiers Hills IV, Molino VI, City of Bacoor</p>
+      <h5>OFFICE OF THE CAMPUS REGISTRAR</h5>
+      <h6>CERTIFICATE OF GRADES</h6>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <p><strong>Full Name:</strong> My full name</p>
+        <p><strong>Year Level:</strong> First Year</p>
+        <p><strong>Degree:</strong> Bachelor of Science in Computer Science</p>
+        <p><strong>Date:</strong> Month Day, Year</p>
+      </div>
+      <div class="col-md-6">
+        <p><strong>Student No.:</strong> 20XXXXXXX</p>
+        <p><strong>Academic Year:</strong> 
+          <select class="form-select d-inline w-auto">
+            <option>2025-2026</option>
+            <option>2026-2027</option>
+          </select>
+        </p>
+      </div>
+    </div>
+
+    <table class="table table-custom">
+      <thead>
+        <tr>
+          <th>Course Code</th>
+          <th>Units</th>
+          <th>Course Title</th>
+          <th>Grades</th>
+          <th>Remarks</th>
+          <th>Instructor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><select class="form-select">
+            <option>---</option>
+          </select></td>
+          <td></td>
+          <td></td>
+          <td><input type="text" class="form-control"></td>
+          <td></td>
+          <td><select class="form-select">
+            <option>---</option>
+          </select></td>
+        </tr>
+        <tr>
+          <td><select class="form-select">
+            <option>---</option>
+          </select></td>
+          <td></td>
+          <td></td>
+          <td><input type="text" class="form-control"></td>
+          <td></td>
+          <td><select class="form-select">
+            <option>---</option>
+          </select></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="row mt-3 mx-auto" style="width: 600px;">
+      <div class="col-md-6">
+        <p><strong>Total subjects enrolled:</strong> __________</p>
+        <p><strong>Total credits enrolled:</strong> __________</p>
+        <p><strong>Grade Point Average:</strong> __________</p>
+      </div>
+    </div>
+
+    <p class="remarks">Remarks: For Evaluation/Enrollment Purposes Only</p>
+
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <p><strong>Encoder Name:</strong> __________</p>
+      </div>
+      <div class="col-md-6">
+        <p><strong>Campus Staff</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

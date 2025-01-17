@@ -55,7 +55,22 @@ h4 {
     width: 100%;
     background: var(--bs-light-bg-subtle);
 }
-
+.alert-container {
+  margin: 1rem 0;
+}
+.alert {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+.alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
 /* Sidebar Elements Style */
 
 .sidebar-logo {

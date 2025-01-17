@@ -4,12 +4,9 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 import datetime
 
-
 current_schoolyear = datetime.datetime.now().year
 ending_schoolyear = current_schoolyear + 1
 date_enrolled = datetime.date.today()
-
-
 
 def generate_cor(cor_template, context={}):
 

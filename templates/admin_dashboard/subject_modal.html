@@ -9,6 +9,15 @@
               <form id="subjectForm" action="{% url 'save_subject' %}" method="POST" data-url="{% url 'save_subject' %}">
                 {% csrf_token %}
                     <input type="hidden" id="subjectId" name="subject_id">
+                    <div class="mb-3">
+                        <label for="program" class="form-label">Program</label>
+                        <select class="form-select" id="program" name="program" required>
+                            <option value="" selected disabled>Choose program</option>
+                            {% for program in programs %}
+                                <option value="{{ program.id }}">{{ program.name }} - {{ program.full }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                   <div class="mb-3">
                       <label for="courseCode" class="form-label">Course Code</label>
                       <input type="text" class="form-control" id="courseCode" name="course_code" placeholder="Enter course code">
@@ -48,7 +57,7 @@
                         <label for="prerequisite" class="form-label">Prerequisite</label>
                         <select class="form-select" id="prerequisite" name="prerequisites" multiple>
                             <option value="" selected>None</option>
-                            {% for subject in subjects %}
+                            {% for subject in allsubjects %}
                                 <option value="{{ subject.id }}">{{ subject }}</option>
                             {% endfor %}
                         </select>

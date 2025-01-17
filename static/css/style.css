@@ -9,6 +9,23 @@ body {
   background: url("../images/CVSU-BG2.png") no-repeat center center/cover;
   overflow: hidden;
 }
+.alert-container {
+  margin: 1rem 0;
+}
+.alert {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+.alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
 
 .container {
   position: absolute;

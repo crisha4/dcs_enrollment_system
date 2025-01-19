@@ -1,6 +1,6 @@
 from django.shortcuts import render , redirect, get_object_or_404
 from django.http import HttpResponse,JsonResponse
-from .models import student, Subject, Instructor, Program, Checklist
+from .models import student, Subject, Instructor, Program, Checklist, school_fees
 from .cor import generate_cor
 from django.template.loader import get_template
 from xhtml2pdf import pisa
@@ -193,6 +193,7 @@ def fetch_subjects(request):
     )
     return JsonResponse(list(subjects), safe=False)
 
+#-------------COONFIGURATION PAGE--SUBJECT---INSTRUCTOR------------------
 def admin_config(request):
     subject_list = Subject.objects.all().prefetch_related('prerequisite')
     paginator = Paginator(subject_list, 10)  # Show 10 subjects per page
@@ -206,7 +207,6 @@ def admin_config(request):
     
     # return render(request, "admin_dashboard/config.html", {'subjects': subjects,'instructors': instructors})
     return render(request, "admin_dashboard/config.html", context)
-
 @login_required
 def save_subject(request):
     if request.method == 'POST':
@@ -251,7 +251,6 @@ def save_subject(request):
             return JsonResponse({'success': True})
         else:
             return JsonResponse({'success': False, 'error': 'An error occurred while saving the subject.'})
- 
 def delete_subject(request, subject_id):
     if request.method == 'GET':
         subject = get_object_or_404(Subject, id=subject_id)
@@ -259,7 +258,6 @@ def delete_subject(request, subject_id):
         return redirect('admin_config')
     else:
         return redirect('admin_config')
-
 def save_instructor(request):
     if request.method == 'POST':
         instructor_id = request.POST.get('instructor_id')  # Hidden field to identify the instructor
@@ -287,7 +285,6 @@ def save_instructor(request):
             )
 
         return JsonResponse({'success': True})
-
 def delete_instructor(request, instructor_id):
     if request.method == 'GET':
         instructor = get_object_or_404(Instructor, id=instructor_id)
@@ -332,6 +329,18 @@ def process_cor(request, student_number):
         'current_SY':current_school_year,
         'previous_SY':previous_school_year,
         'next_SY':next_school_year,
+
+        'lab_fee': school_fees.objects.filter(school_fee_name='lab_fees').values(),
+        'reg_fee': school_fees.objects.filter(school_fee_name='reg_fee').values(),
+        'insurance_fee': school_fees.objects.filter(school_fee_name='insurance').values(),
+        'id_fee': school_fees.objects.filter(school_fee_name='id').values(),
+        'sfdf_fee': school_fees.objects.filter(school_fee_name='sfdf').values(),
+        'srf_fee': school_fees.objects.filter(school_fee_name='srf').values(),
+        'misc_fee': school_fees.objects.filter(school_fee_name='misc').values(),
+        'athletics_fee': school_fees.objects.filter(school_fee_name='athletics').values(),
+        'scuaa_fee': school_fees.objects.filter(school_fee_name='scuaa').values(),
+        'library_fee': school_fees.objects.filter(school_fee_name='library_free').values(),
+        'other_fee': school_fees.objects.filter(school_fee_name='other_fees').values(),
     }
 
     return HttpResponse(template.render(context, request))
@@ -342,7 +351,8 @@ def edit_info(request, student_number):
     template = get_template('admin_dashboard/edit_student_info.html')
     enrolled_student = student.objects.get(studentnumber=student_number)
     context = {
-        'enrolled_student':enrolled_student
+        'enrolled_student':enrolled_student,
+        'programs': Program.objects.all(),
     }
     return HttpResponse(template.render(context, request))
 
@@ -358,14 +368,28 @@ def update_info(request, student_number):
     contact_info = request.POST['contactNumber']
     email = request.POST['email']
     address = request.POST['Address']
-    studentyear = request.POST['yearlevel']
     Sectionyear = request.POST['year_standing']
+
+    match(Sectionyear):
+            case "1":
+                studentyear = '1st Year'
+            case "2":
+                studentyear = '2nd Year'
+            case "3":
+                studentyear = '3rd Year'
+            case "4":
+                studentyear = '4th Year'
+            case _:
+                return HttpResponse("Please enter 1 to 4 in year standing")
+      
+    
     Section = request.POST['section']
-    Course = request.POST['course']
-    Major = request.POST['major']
+    program_id = request.POST['course']
     Suffix = request.POST['suffix']
     Status = request.POST['status']
     studenttype = request.POST['studentType']
+
+    Course = get_object_or_404(Program, id=program_id)
 
     student.objects.filter(studentnumber=student_number).update(
         firstname = first_name, 
@@ -380,12 +404,11 @@ def update_info(request, student_number):
         sectionyear = Sectionyear,
         section = Section,
         course = Course,
-        major = Major,
         status = Status,
         new_or_old = studenttype
         
     )
-    context = {}
+    context = {'allstudents':student.objects.all()}
 
     return HttpResponse(template.render(context, request))
 

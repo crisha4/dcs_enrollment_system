@@ -35,6 +35,7 @@
 
             #fees_data{
                 padding-left: 2px;
+                padding-top: 2px;
                 padding-bottom: -1px;
                 border-left: 1px solid black;
                 border-right: 1px solid black;
@@ -42,14 +43,17 @@
                 max-height: 20%;
             }
 
-            #total_fees_data{
+            .total_fees_data{
                 padding-left: 2px;
                 padding-bottom: -3px;
+                padding-top:2px;
                 border-left: 1px solid black;
                 border-right: 1px solid black;
                 border-bottom: 1px solid black;
             }
-            
+            .table-bottom{
+                border-bottom: 1px solid black;
+            }
             #student_information{
                 padding-bottom: -11px;
             }
@@ -116,14 +120,12 @@
                 
                     <td><b>Student Name:</b> {{ info.firstname }} {{ info.middlename }} {{ info.lastname }}</td>
                     <td><b>Date:</b> {{ date_enrolled }}</td>
-                    <td><b>Major:</b> {{ info.major }}</b> </td>
-                    
                 </tr>
 
                 
                 <tr>
                     <td><b>Course:</b> {{ info.course }}</b> </td>
-                    <td><b>Encoder:</b> </td>
+                    <td><b>Encoder:</b> {{ user.last_name }}, {{ user.first_name }}</td>
                 </tr>
 
                 <tr>
@@ -144,421 +146,416 @@
                 <tr id="table_header">
                     <th id="subject_header">Sched Code</th>
                     <th id="subject_header">Course Code</th>
-                    <th id="subject_header">Course Description</th>
+                    <th id="subject_header" style="width:30%">Course Description</th>
                     <th id="subject_header">Units<br>Lec&nbsp;&nbsp;/&nbsp;&nbsp;Lab</th>
                     <th id="subject_header">Time</th>
                     <th id="subject_header">Day</th>
                     <th id="subject_header">Room</th>
                 </tr>
-
                 
-                    <tr>
-
-                        {% if not subject1  %}
-
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-
-                        {% else %}
-
-                        {% for subject_info in subject1 %}
-
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">{{ subject_info.course_code}}</td>
-                        <td id="subject_data">{{ subject_info.course_description}}</td>
-                        <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-
-                        {% endfor %}
-                        {% endif %}
-                    </tr>
-
-                    <tr>
-                        
-                        {% if not subject2  %}
-
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-
-                        {% else %}
-
-
-                        {% for subject_info in subject2 %}
-
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">{{ subject_info.course_code}}</td>
-                        <td id="subject_data">{{ subject_info.course_description}}</td>
-                        <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-
-                        {% endfor %}
-                        {% endif %}
-                    </tr>
-
-                    <tr>
-
-                        {% if not subject3  %}
-
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-
-                        {% else %}
-
-                        {% for subject_info in subject3 %}
-
-                            <td id="subject_data">TBA</td>
-                            <td id="subject_data">{{ subject_info.course_code}}</td>
-                            <td id="subject_data">{{ subject_info.course_description}}</td>
-                            <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
-                            <td id="subject_data">TBA</td>
-                            <td id="subject_data">TBA</td>
-                            <td id="subject_data">TBA</td>
-
-                        {% endfor %}
-                        {% endif %}
-                        
-                    </tr>
-
-                    <tr>
-
-                        {% if not subject4  %}
-
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-
-                        {% else %}
-
-                        {% for subject_info in subject4 %}
-
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">{{ subject_info.course_code}}</td>
-                        <td id="subject_data">{{ subject_info.course_description}}</td>
-                        <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-
-                        {% endfor %}
-                        {% endif %}
-                    </tr>
-
-                    <tr>
-
-                        {% if not subject5  %}
-
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-
-                        {% else %}
-
-                        {% for subject_info in subject5 %}
-
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">{{ subject_info.course_code}}</td>
-                        <td id="subject_data">{{ subject_info.course_description}}</td>
-                        <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-
-                        {% endfor %}
-                        {% endif %}
-                    </tr>
-
-                    <tr>
-
-                        {% if not subject6  %}
-
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-
-                        {% else %}
-
-                        {% for subject_info in subject6 %}
-
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">{{ subject_info.course_code}}</td>
-                        <td id="subject_data">{{ subject_info.course_description}}</td>
-                        <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-
-                        {% endfor %}
-                        {% endif %}
-                    </tr>
-
-                    <tr>
-
-                        {% if not subject7  %}
-
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-
-                        {% else %}
-
-                        {% for subject_info in subject7 %}
-
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">{{ subject_info.course_code}}</td>
-                        <td id="subject_data">{{ subject_info.course_description}}</td>
-                        <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-
-                        {% endfor %}
-                        {% endif %}
-                    </tr>
-
-                    <tr>
-
-                        {% if not subject8  %}
-
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-
-                        {% else %}
-
-                        {% for subject_info in subject8 %}
-
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">{{ subject_info.course_code}}</td>
-                        <td id="subject_data">{{ subject_info.course_description}}</td>
-                        <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-
-                        {% endfor %}
-                        {% endif %}
-                    </tr>
-
-                    <tr>
-
-                        {% if not subject9  %}
-
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-
-                        {% else %}
-
-                        {% for subject_info in subject9 %}
-
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">{{ subject_info.course_code}}</td>
-                        <td id="subject_data">{{ subject_info.course_description}}</td>
-                        <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-
-                        {% endfor %}
-                        {% endif %}
-                    </tr>
-
-                    <tr>
-
-                        {% if not subject10  %}
-
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-                        <td id="subject_data">&nbsp;</td>
-
-                        {% else %}
-
-                        {% for subject_info in subject10 %}
-
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">{{ subject_info.course_code}}</td>
-                        <td id="subject_data">{{ subject_info.course_description}}</td>
-                        <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-                        <td id="subject_data">TBA</td>
-
-                        {% endfor %}
-                        {% endif %}
-                    </tr>
+                <tr>
+
+                    {% if not subject1  %}
+
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+
+                    {% else %}
+
+                    {% for subject_info in subject1 %}
+
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">{{ subject_info.course_code}}</td>
+                    <td id="subject_data">{{ subject_info.course_title}}</td>
+                    <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+
+                    {% endfor %}
+                    {% endif %}
+                </tr>
+
+                <tr>
                     
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                </table>
+                    {% if not subject2  %}
 
-                <table>
-                    <tr>
-                        <th id="fees_header">Laboratory Fees</th>
-                        <th id="fees_header">Other Fees</th>
-                        <th id="fees_header">Assessment</th>
-                        <th id="fees_header">Total UNITS: {{ total_units }}</th>
-                    </tr>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
 
-                    <tr>
-                            {% if total_units_lab == 0  %}
-                            <td rowspan="4" id="fees_data">
-                                Com.Lab&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-
-                            </td>
-                            {% else %}
+                    {% else %}
 
-                            <td rowspan="4" id="fees_data">
-                                
-                            Com.Lab&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ lab_fee }}
-                                
-                            </td>
-                            
-                        {% endif %}
 
-                        <td rowspan="4" style="line-height: 0;" id="fees_data">
-                            <p>NSTP&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ nstp_fee }}</p>
+                    {% for subject_info in subject2 %}
 
-                            {% for fee in reg_fee %}
-                                <p>Reg. Fee&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}</p>
-                            {% endfor %}
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">{{ subject_info.course_code}}</td>
+                    <td id="subject_data">{{ subject_info.course_title}}</td>
+                    <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
 
-                            <p>ID&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ id_fee }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </tr>
 
-                            <p>Late Reg.&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ late_reg }}</p>
-                            
-                            {% for fee in insurance_fee %}
-                                <p>Insurance&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}</p>
-                            {% endfor %}
-                        </td>
+                <tr>
+
+                    {% if not subject3  %}
+
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+
+                    {% else %}
+
+                    {% for subject_info in subject3 %}
+
+                        <td id="subject_data">TBA</td>
+                        <td id="subject_data">{{ subject_info.course_code}}</td>
+                        <td id="subject_data">{{ subject_info.course_title}}</td>
+                        <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
+                        <td id="subject_data">TBA</td>
+                        <td id="subject_data">TBA</td>
+                        <td id="subject_data">TBA</td>
+
+                    {% endfor %}
+                    {% endif %}
+                    
+                </tr>
+
+                <tr>
+
+                    {% if not subject4  %}
+
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+
+                    {% else %}
+
+                    {% for subject_info in subject4 %}
+
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">{{ subject_info.course_code}}</td>
+                    <td id="subject_data">{{ subject_info.course_title}}</td>
+                    <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+
+                    {% endfor %}
+                    {% endif %}
+                </tr>
+
+                <tr>
+
+                    {% if not subject5  %}
+
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+
+                    {% else %}
+
+                    {% for subject_info in subject5 %}
+
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">{{ subject_info.course_code}}</td>
+                    <td id="subject_data">{{ subject_info.course_title}}</td>
+                    <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+
+                    {% endfor %}
+                    {% endif %}
+                </tr>
+
+                <tr>
+
+                    {% if not subject6  %}
+
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+
+                    {% else %}
+
+                    {% for subject_info in subject6 %}
+
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">{{ subject_info.course_code}}</td>
+                    <td id="subject_data">{{ subject_info.course_title}}</td>
+                    <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+
+                    {% endfor %}
+                    {% endif %}
+                </tr>
+
+                <tr>
+
+                    {% if not subject7  %}
+
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+
+                    {% else %}
+
+                    {% for subject_info in subject7 %}
+
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">{{ subject_info.course_code}}</td>
+                    <td id="subject_data">{{ subject_info.course_title}}</td>
+                    <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+
+                    {% endfor %}
+                    {% endif %}
+                </tr>
+
+                <tr>
+
+                    {% if not subject8  %}
+
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+
+                    {% else %}
+
+                    {% for subject_info in subject8 %}
+
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">{{ subject_info.course_code}}</td>
+                    <td id="subject_data">{{ subject_info.course_title}}</td>
+                    <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+
+                    {% endfor %}
+                    {% endif %}
+                </tr>
+
+                <tr>
+
+                    {% if not subject9  %}
+
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+
+                    {% else %}
+
+                    {% for subject_info in subject9 %}
+
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">{{ subject_info.course_code}}</td>
+                    <td id="subject_data">{{ subject_info.course_title}}</td>
+                    <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+
+                    {% endfor %}
+                    {% endif %}
+                </tr>
+
+                <tr>
+
+                    {% if not subject10  %}
+
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+                    <td id="subject_data">&nbsp;</td>
+
+                    {% else %}
+
+                    {% for subject_info in subject10 %}
+
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">{{ subject_info.course_code}}</td>
+                    <td id="subject_data">{{ subject_info.course_title}}</td>
+                    <td id="subject_data">{{ subject_info.subject_units_lec}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ subject_info.subject_units_lab }}</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+                    <td id="subject_data">TBA</td>
+
+                    {% endfor %}
+                    {% endif %}
+                </tr>
+                
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+
+            <table class="table-bottom">
+                <tr>
+                    <th id="fees_header">Laboratory Fees</th>
+                    <th id="fees_header">Other Fees</th>
+                    <th id="fees_header">Assessment</th>
+                    <th id="fees_header">Total UNITS: {{ total_units }}</th>
+                </tr>
+
+                <tr>
+                    {% if total_units_lab == 0  %}
                         <td rowspan="4" id="fees_data">
-                            Tuition Fee&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ tuition_fee }}<br>
-
-                            {% for fee in sfdf_fee %}
-                                SFDF&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}<br>
-                            {% endfor %}
-                            
-                            {% for fee in srf_fee %}
-                                SRF&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}<br>
-                            {% endfor %}
-
-                            {% for fee in misc_fee %}
-                                Misc.&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}<br>
-                            {% endfor %}
-
-                            {% for fee in athletics_fee %}
-                                Athletics&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}<br>
-                            {% endfor %}
-
-                            {% for fee in scuaa_fee %}
-                                SCUAA&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}<br>
-                            {% endfor %}
-
-                            {% for fee in library_fee %}
-                                Library Fee&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}<br>
-                            {% endfor %}
-
-                            
-                            Lab Fees&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ lab_fee }}<br>
-                            
-
-                            
-                            Other Fees&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ other_fees }}<br>
-
+                            Com.Lab&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-
                         </td>
-                        <td id="total_fees_data"><b>Total HOURS:</b></td>
+                    {% else %}
+                        <td rowspan="4" id="fees_data">
+                            Com.Lab&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ lab_fee }}
+                        </td>
+                    {% endif %}
+
+                    <td rowspan="4" style="line-height: 0;" id="fees_data">
+                        <p>NSTP&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ nstp_fee }}</p>
+
+                        {% for fee in reg_fee %}
+                            <p>Reg. Fee&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}</p>
+                        {% endfor %}
+
+                        <p>ID&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ id_fee }}</p>
+
+                        <p>Late Reg.&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ late_reg }}</p>
+                        
+                        {% for fee in insurance_fee %}
+                            <p>Insurance&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}</p>
+                        {% endfor %}
+                    </td>
+                    <td rowspan="4" id="fees_data">
+                        Tuition Fee&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ tuition_fee }}<br>
+
+                        {% for fee in sfdf_fee %}
+                            SFDF&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}<br>
+                        {% endfor %}
+                        
+                        {% for fee in srf_fee %}
+                            SRF&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}<br>
+                        {% endfor %}
+
+                        {% for fee in misc_fee %}
+                            Misc.&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}<br>
+                        {% endfor %}
+
+                        {% for fee in athletics_fee %}
+                            Athletics&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}<br>
+                        {% endfor %}
+
+                        {% for fee in scuaa_fee %}
+                            SCUAA&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}<br>
+                        {% endfor %}
+
+                        {% for fee in library_fee %}
+                            Library Fee&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}<br>
+                        {% endfor %}
 
                         
-                    </tr>
-
-                    <tr>
+                        Lab Fees&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ lab_fee }}<br>
                         
-                        <td id="total_fees_data">
-                            <p>TOTAL AMOUNT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ total_amount }}</p>
-                            <p>Scholarship</p>
-                            <b>Ched Free Tuition and Misc. Fee</b>
-                        </td>
-                    </tr>
 
-                    <tr>
                         
-                        <td id="total_fees_data">
-                            <p>Tuition:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ tuition_fee }}</p>
+                        Other Fees&nbsp;&nbsp;&nbsp; <b>P</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ other_fees }}<br>
 
-                            {% for fee in sfdf_fee %}
-                                <p>SFDF:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}</p>
-                            {% endfor %}
+                    </td>
+                    <td class="total_fees_data"><b>Total HOURS:</b></td>
 
-                            {% for fee in srf_fee %}
-                                <p>SRF::&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}</p>
-                            {% endfor %}
-                        </td>
+                    
+                </tr>
 
-                    </tr>
+                <tr>
+                    
+                    <td class="total_fees_data">
+                        <p>TOTAL AMOUNT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ total_amount }}</p>
+                        <p>Scholarship</p>
+                        <b>Ched Free Tuition and Misc. Fee</b>
+                    </td>
+                </tr>
 
-                    <tr>
-                        
-                        <td id="total_fees_data">
-                            <b>Terms of Payment</b>
-                            <p></p>First&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ total_amount }}</p>
-                            <p>Second:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                            <p>Third:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                        </td>
-                    </tr>
+                <tr>
+                    
+                    <td class="total_fees_data">
+                        <p>Tuition:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ tuition_fee }}</p>
 
-                </table>
+                        {% for fee in sfdf_fee %}
+                            <p>SFDF:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}</p>
+                        {% endfor %}
+
+                        {% for fee in srf_fee %}
+                            <p>SRF::&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fee.school_fee_value }}</p>
+                        {% endfor %}
+                    </td>
+
+                </tr>
+
+                <tr>
+                    
+                    <td class="total_fees_data">
+                        <b>Terms of Payment</b>
+                        <p></p>First&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ total_amount }}</p>
+                        <p>Second:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                        <p>Third:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                    </td>
+                </tr>
+
+            </table>
 
                 <h2 style="font-size: 15px;"><b>NOTE: Your slots on the above subjects will be confirmed only upon payment</b></h2>
 
@@ -581,10 +578,6 @@
                     <p>{{ fee_names }}</p>
 
                 </div>
-
         </div>
-
-        
     </body>
-
 </html>

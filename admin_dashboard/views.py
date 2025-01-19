@@ -22,7 +22,7 @@ number_of_students_enrolled = student.objects.all().count()
 def home(request):
     context = {
         'allstudents':student.objects.all(),
-        'number_of_students_enrolled':number_of_students_enrolled
+        'number_of_students_enrolled':student.objects.all().count()
     }
 
     return render(request, 'admin_dashboard/index.html', context)
@@ -205,7 +205,6 @@ def admin_config(request):
     programs = Program.objects.all()
     context = {'subjects': subjects, 'instructors': instructors, 'allsubjects': allsubjects, 'programs':programs}
     
-    # return render(request, "admin_dashboard/config.html", {'subjects': subjects,'instructors': instructors})
     return render(request, "admin_dashboard/config.html", context)
 @login_required
 def save_subject(request):
@@ -414,54 +413,194 @@ def update_info(request, student_number):
 
 def print_cor(request, student_number):
         
-        if request.method == 'POST':
-        
-            enrolled_student = student.objects.filter(studentnumber = student_number)
-            semester = request.POST.get('semester')
-            yearstanding = request.POST.get('yearstanding')
-            section = request.POST.get('section')
-            yearlevel = request.POST.get('yearlevel')
-            old_new = request.POST.get('old/new')
-            status = request.POST.get('status')
-            date_enrolled = datetime.today()
+    if request.method == 'POST':
 
-            subject1 = request.POST.get('subject1')
-            subject2 = request.POST.get('subject2')
-            subject3 = request.POST.get('subject3')
-            subject4 = request.POST.get('subject4')
-            subject5 = request.POST.get('subject5')
-            subject6 = request.POST.get('subject6')
-            subject7 = request.POST.get('subject7')
-            subject8 = request.POST.get('subject8')
-            subject9 = request.POST.get('subject9')
-            subject10 = request.POST.get('subject10')
+        enrolled_student = student.objects.filter(studentnumber = student_number)
+        semester = request.POST.get('semester')
+        yearstanding = request.POST.get('yearstanding')
+        Section = request.POST.get('section')
+        old_new = request.POST.get('old_new')
+        Status = request.POST.get('status')
+        school_year = request.POST.get('schoolyear')
+        other_fees = request.POST.get('other_fees')
+        late_reg = request.POST.get('late_reg')
+        ID_fee = request.POST.get('ID_fee')
 
-            context = {
-                'enrolled_student': enrolled_student,
-                'semester': semester,
-                'yearstanding': yearstanding,
-                'section': section,
-                'yearlevel': yearlevel,
-                'old_new': old_new,
-                'status': status,
-                'date_enrolled': date_enrolled,
+        date_enrolled = datetime.today()
+        tuition = 0
+        lab_fee = 0
+        nstp_fee = 0
+        total_amount = 0
+        total_units_lab = 0
+        total_units_lec = 0
+        total_units = 0
 
-                'subject1': Subject.objects.filter(course_code=subject1).values(),
-                'subject2': Subject.objects.filter(course_code=subject2).values(),
-                'subject3': Subject.objects.filter(course_code=subject3).values(),
-                'subject4': Subject.objects.filter(course_code=subject4).values(),
-                'subject5': Subject.objects.filter(course_code=subject5).values(),
-                'subject6': Subject.objects.filter(course_code=subject6).values(),
-                'subject7': Subject.objects.filter(course_code=subject7).values(),
-                'subject8': Subject.objects.filter(course_code=subject8).values(),
-                'subject9': Subject.objects.filter(course_code=subject9).values(),
-                'subject10': Subject.objects.filter(course_code=subject10).values(),
+        match(yearstanding):
+            case "1":
+                yearlevel = '1st Year'
+            case "2":
+                yearlevel = '2nd Year'
+            case "3":
+                yearlevel = '3rd Year'
+            case "4":
+                yearlevel = '4th Year'
+            case _:
+                return HttpResponse("Please enter 1 to 4 in year standing")
 
-                'allsubjects': ['subject1', 'subject2', 'subject3', 'subject4', 'subject5', 'subject6', 'subject7', 'subject8', 'subject9', 'subject10']
+        subject1 = request.POST.get('subject1')
+        subject2 = request.POST.get('subject2')
+        subject3 = request.POST.get('subject3')
+        subject4 = request.POST.get('subject4')
+        subject5 = request.POST.get('subject5')
+        subject6 = request.POST.get('subject6')
+        subject7 = request.POST.get('subject7')
+        subject8 = request.POST.get('subject8')
+        subject9 = request.POST.get('subject9') 
+        subject10 = request.POST.get('subject10')
 
-            }
+        input_subjects = [subject1, subject2, subject3, subject4, subject5, subject6, subject7, subject8, subject9, subject10]
 
-            cor = generate_cor('admin_dashboard/cor_template.html', context)
+        for sub in input_subjects:
 
-            return HttpResponse(cor, content_type='application/pdf')
+            units_lab = Subject.objects.filter(course_code=sub).values_list('subject_units_lab')
+            units_lec = Subject.objects.filter(course_code=sub).values_list('subject_units_lec')
+
+            for subject in units_lab:
+                for lab_units in subject:
+                    if lab_units == None:
+                        lab_units = 0
+                    int(lab_units)
+                    total_units_lab += lab_units
+
+
+            for subject in units_lec:
+                for lec_units in subject:
+                    if lec_units == None:
+                        lec_units = 0
+
+                    int(lec_units)
+                    total_units_lec += lec_units
+            
+            total_units = total_units_lec + total_units_lab
+
+        fees_list = ['lab_fees', 'reg_fee', 'insurance', 'sfdf', 'srf', 'misc', 'athletics', 'scuaa', 'library_fee', 'tuition_fee']
+
+
+        if "NSTP 1" in input_subjects or "NSTP 2" in input_subjects:
+
+            fee_values = school_fees.objects.filter(school_fee_name="nstp_fee").values_list('school_fee_value')
+
+            for fees in fee_values:
+                for values in fees:
+                    float(values)
+                    nstp_fee += values
+                    total_amount += values
+                    
+
+        for fee_names in fees_list:
+
+            fee_values = school_fees.objects.filter(school_fee_name=fee_names).values_list('school_fee_value')
+            
+            if fee_names == 'tuition_fee':
+                for fees in fee_values:
+                    for values in fees:
+                        float(values)
+                        tuition = total_units * values
+
+            if fee_names == 'lab_fees':
+
+                if total_units_lab == 0:
+                    print("Total units lab", total_units_lab)
+                    continue
+
+                for fees in fee_values:
+                    for values in fees:
+                        float(values)
+                        print("for lab fees","-",values)
+                        total_amount += values
+                        lab_fee += values
+    
+
+            for fees in fee_values:
+                if fee_names == 'tuition_fee' or fee_names == 'lab_fees' or fee_names == 'nstp_fee':
+                    continue
+                for values in fees:
+                    float(values)
+                    print(fee_names,"-",values, "Total units lab",total_units_lab)
+                    total_amount += values
+                    
+
+
+        total_amount += tuition
+
+        if late_reg == "":
+            late_reg = 0
+        if other_fees == "":
+            other_fees = 0
+
+        total_amount = float(total_amount) + float(late_reg)
+        total_amount = float(total_amount) + float(other_fees)
+        total_amount = float(total_amount) + float(ID_fee)
+
+
+
+        context = {
+
+            'enrolled_student': enrolled_student,
+            'semester': semester,
+            'yearstanding': yearstanding,
+            'section': Section,
+            'yearlevel': yearlevel,
+            'old_new': old_new,
+            'status': Status,
+            'schoolyear': school_year,
+            'date_enrolled': date_enrolled,
+            'total_units': total_units,
+            'total_units_lab': total_units_lab,
+            'id_fee': ID_fee,
+            'tuition_fee': tuition,
+            'late_reg': late_reg,
+            'lab_fee': lab_fee,
+            'nstp_fee': nstp_fee,
+            'other_fees': other_fees,
+            'total_amount': total_amount,
+
+            'subject1': Subject.objects.filter(course_code=subject1).values(),
+            'subject2': Subject.objects.filter(course_code=subject2).values(),
+            'subject3': Subject.objects.filter(course_code=subject3).values(),
+            'subject4': Subject.objects.filter(course_code=subject4).values(),
+            'subject5': Subject.objects.filter(course_code=subject5).values(),
+            'subject6': Subject.objects.filter(course_code=subject6).values(),
+            'subject7': Subject.objects.filter(course_code=subject7).values(),
+            'subject8': Subject.objects.filter(course_code=subject8).values(),
+            'subject9': Subject.objects.filter(course_code=subject9).values(),
+            'subject10': Subject.objects.filter(course_code=subject10).values(),
+
+            
+            'reg_fee': school_fees.objects.filter(school_fee_name='reg_fee').values(),
+            'insurance_fee': school_fees.objects.filter(school_fee_name='insurance').values(),
+            'sfdf_fee': school_fees.objects.filter(school_fee_name='sfdf').values(),
+            'srf_fee': school_fees.objects.filter(school_fee_name='srf').values(),
+            'misc_fee': school_fees.objects.filter(school_fee_name='misc').values(),
+            'athletics_fee': school_fees.objects.filter(school_fee_name='athletics').values(),
+            'scuaa_fee': school_fees.objects.filter(school_fee_name='scuaa').values(),
+            'library_fee': school_fees.objects.filter(school_fee_name='library_fee').values(),
+            'other_fee': school_fees.objects.filter(school_fee_name='other_fees').values(),
+
+            'user': request.user,
+        }
+
+        student.objects.filter(studentnumber=student_number).update(
+
+            sectionyear = yearstanding,
+            year = yearlevel,
+            section = Section,
+            new_or_old = old_new,
+            status = Status,
+
+        )
+
+        cor = generate_cor('admin_dashboard/cor_template.html', context)
+
+        return HttpResponse(cor, content_type='application/pdf')
 

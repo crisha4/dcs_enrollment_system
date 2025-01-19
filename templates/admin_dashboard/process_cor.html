@@ -19,29 +19,31 @@
                             <div class="col-md-2">
                                 <label for="semester" class="form-label">Semester</label>
                                 <select id="semester" class="form-select" name="semester"required>
-                                    <option value="1st Semeseter">1st Semeseter</option>
-                                    <option value="2nd Semeseter">2nd Semeseter</option>
+                                    <option value="1st Semeseter">1st Semester</option>
+                                    <option value="2nd Semeseter">2nd Semester</option>
                                 </select>
                             </div>
 
-                            <div class="col-md-1">
-                                <label for="section" class="form-label">Year</label>
+                            <div class="col">
+                                <label for="yearstanding" class="form-label">Year</label>
                                 <select id="yearstanding" class="form-select" name="yearstanding" required>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
+                                    <option value="{{ enrolled_student.sectionyear }}" selected hidden>{{ enrolled_student.sectionyear }}</option>
+                                    <option value="1">1st Year</option>
+                                    <option value="2">2nd Year</option>
+                                    <option value="3">3rd Year</option>
+                                    <option value="4">4th Year</option>
                                 </select>
                             </div>
                             
                             <div class="col-md-2">
                                 <label for="section" class="form-label">Section</label>
-                                <input type="text" class="form-control" name="section" placeholder="section"required>
+                                <input type="text" class="form-control" name="section" value="{{ enrolled_student.section }}" required>
                             </div>
 
                             <div class="col-md-2">
                                 <label for="old_new" class="form-label">Old/New Student</label>
                                 <select id="old_new" class="form-select" name="old_new" required>
+                                    <option value="{{ enrolled_student.new_or_old }}" selected hidden>{{ enrolled_student.new_or_old }}</option>
                                     <option value="Old">Old</option>
                                     <option value="New">New</option>
                                 </select>
@@ -50,6 +52,7 @@
                             <div class="col-md-2">
                                 <label for="status" class="form-label">Registration Status</label>
                                 <select id="status" class="form-select" name="status" required>
+                                    <option value="{{ enrolled_student.status }}" selected hidden>{{ enrolled_student.status }}</option>
                                     <option value="Regular">Regular</option>
                                     <option value="Irregular">Irregular</option>
                                 </select>
@@ -58,18 +61,15 @@
                             <div class="col-md-2">
                                 <label for="schoolyear" class="form-label">School Year</label>
                                 <select id="schoolyear" class="form-select" name="schoolyear" required>
-                                    <option value="{{ current_SY }} - {{ next_SY }}">{{ current_SY }} - {{ next_SY }}</option>
+                                    <option value="{{ current_SY }} - {{ next_SY }}" selected>{{ current_SY }} - {{ next_SY }}</option>
                                     <option value="{{ previous_SY }} - {{ current_SY }}">{{ previous_SY }} - {{ current_SY }}</option>
                                 </select>
                             </div>
 
                         </div>
                     </div>
-
                     <hr>
-
                     <div class="card-body">
-
                         <div class="col-md-2">
                             <select id="subject1" class="form-select" name="subject1">
                                 <option value="" selected>Subject 1</option>
@@ -78,7 +78,6 @@
                                 {% endfor %}
                             </select>
                         </div>
-
                         <div class="col-md-2">
                             <select id="subject2" class="form-select" name="subject2">
                                 <option value="" selected>Subject 2</option>
@@ -188,10 +187,12 @@
                         </div>
                     </div>
         
-                <div class="card-footer text-center">
-                    <button type="submit" class="btn btn-primary">Print Cor</button>
-                </div>
-                
-            </form>
+                    <div class="card-footer text-center">
+                        <button type="submit" class="btn btn-primary">Print Cor</button>
+                    </div>
+                </form>
+            </div>
         </div>
+    </div>
+</div>
 {% endblock %}

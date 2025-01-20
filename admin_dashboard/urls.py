@@ -18,4 +18,6 @@ urlpatterns = [
     path("enroll_new_student/", views.enroll_new_student, name='enroll_new_student'),
     path("enroll_old_student/", views.enroll_old_student, name='enroll_old_student'),
     path("search_students/", views.search_students, name='search_students'),
+    path("admin_adjust_fees/", views.adjust_fees, name="adjust_fees"),
+    path("admin_set_fees/", views.set_fees, name="set_fees"),
 ]

@@ -29,8 +29,7 @@ def home(request):
 
 def admin_profile(request):
     return render(request, "admin_dashboard/profile.html",{})
-def admin_masterlist(request):
-    return render(request, "admin_dashboard/masterlist.html",{'allstudents':student.objects.all()})
+
 def admin_schedule(request):
     return render(request, "admin_dashboard/schedule.html",{})
 
@@ -259,14 +258,14 @@ def delete_subject(request, subject_id):
         return redirect('admin_config')
 def save_instructor(request):
     if request.method == 'POST':
-        instructor_id = request.POST.get('instructor_id')  # Hidden field to identify the instructor
+        instructor_id = request.POST.get('instructor_id')
         name = request.POST.get('instructor_name')
         gender = request.POST.get('gender')
         email = request.POST.get('email')
         contact = request.POST.get('contact')
         address = request.POST.get('address')
 
-        if instructor_id:  # Edit existing instructor
+        if instructor_id:
             instructor = get_object_or_404(Instructor, id=instructor_id)
             instructor.name = name
             instructor.gender = gender
@@ -274,7 +273,7 @@ def save_instructor(request):
             instructor.contact = contact
             instructor.address = address
             instructor.save()
-        else:  # Add new instructor
+        else: 
             Instructor.objects.create(
                 name=name,
                 gender=gender,
@@ -292,6 +291,10 @@ def delete_instructor(request, instructor_id):
     else:
         return redirect('admin_config')
 
+#-----------------MASTERLIST FUNCTIONS-SEARCH-EDIT-ENROLL-PRINT COR--------------------------
+
+def admin_masterlist(request):
+    return render(request, "admin_dashboard/masterlist.html",{'allstudents':student.objects.all()})
 def search_students(request):
 
     if request.method == 'POST':
@@ -302,7 +305,7 @@ def search_students(request):
 
         template = get_template('admin_dashboard/search_results.html')
 
-        search_results = student.objects.filter(year=search_year).values() | student.objects.filter(course=search_course).values() | student.objects.filter(studentnumber=search_student_id).values()
+        search_results = student.objects.filter(year=search_year).values() | student.objects.filter(course=search_course) | student.objects.filter(studentnumber=search_student_id).values()
         
         context = {
         'allstudents': allstudents,
@@ -313,38 +316,6 @@ def search_students(request):
     else:
         return HttpResponse("Not Found")
 
-def process_cor(request, student_number):
-
-    template = get_template('admin_dashboard/process_cor.html')
-    enrolled_student = student.objects.get(studentnumber=student_number)
-    subject_code = Subject.objects.filter(program=enrolled_student.course).order_by('year', 'semester', 'course_code')
-    current_school_year = datetime.now().year
-    previous_school_year = datetime.now().year - 1
-    next_school_year = datetime.now().year + 1
-
-    context = {
-        'enrolled_student': enrolled_student,
-        'subject_codes':subject_code,
-        'current_SY':current_school_year,
-        'previous_SY':previous_school_year,
-        'next_SY':next_school_year,
-
-        'lab_fee': school_fees.objects.filter(school_fee_name='lab_fees').values(),
-        'reg_fee': school_fees.objects.filter(school_fee_name='reg_fee').values(),
-        'insurance_fee': school_fees.objects.filter(school_fee_name='insurance').values(),
-        'id_fee': school_fees.objects.filter(school_fee_name='id').values(),
-        'sfdf_fee': school_fees.objects.filter(school_fee_name='sfdf').values(),
-        'srf_fee': school_fees.objects.filter(school_fee_name='srf').values(),
-        'misc_fee': school_fees.objects.filter(school_fee_name='misc').values(),
-        'athletics_fee': school_fees.objects.filter(school_fee_name='athletics').values(),
-        'scuaa_fee': school_fees.objects.filter(school_fee_name='scuaa').values(),
-        'library_fee': school_fees.objects.filter(school_fee_name='library_free').values(),
-        'other_fee': school_fees.objects.filter(school_fee_name='other_fees').values(),
-    }
-
-    return HttpResponse(template.render(context, request))
-
-
 def edit_info(request, student_number):
 
     template = get_template('admin_dashboard/edit_student_info.html')
@@ -354,7 +325,6 @@ def edit_info(request, student_number):
         'programs': Program.objects.all(),
     }
     return HttpResponse(template.render(context, request))
-
 
 def update_info(request, student_number):
 
@@ -408,6 +378,37 @@ def update_info(request, student_number):
         
     )
     context = {'allstudents':student.objects.all()}
+
+    return HttpResponse(template.render(context, request))
+
+def process_cor(request, student_number):
+
+    template = get_template('admin_dashboard/process_cor.html')
+    enrolled_student = student.objects.get(studentnumber=student_number)
+    subject_code = Subject.objects.filter(program=enrolled_student.course).order_by('year', 'semester', 'course_code')
+    current_school_year = datetime.now().year
+    previous_school_year = datetime.now().year - 1
+    next_school_year = datetime.now().year + 1
+
+    context = {
+        'enrolled_student': enrolled_student,
+        'subject_codes':subject_code,
+        'current_SY':current_school_year,
+        'previous_SY':previous_school_year,
+        'next_SY':next_school_year,
+
+        'lab_fee': school_fees.objects.filter(school_fee_name='lab_fees').values(),
+        'reg_fee': school_fees.objects.filter(school_fee_name='reg_fee').values(),
+        'insurance_fee': school_fees.objects.filter(school_fee_name='insurance').values(),
+        'id_fee': school_fees.objects.filter(school_fee_name='id').values(),
+        'sfdf_fee': school_fees.objects.filter(school_fee_name='sfdf').values(),
+        'srf_fee': school_fees.objects.filter(school_fee_name='srf').values(),
+        'misc_fee': school_fees.objects.filter(school_fee_name='misc').values(),
+        'athletics_fee': school_fees.objects.filter(school_fee_name='athletics').values(),
+        'scuaa_fee': school_fees.objects.filter(school_fee_name='scuaa').values(),
+        'library_fee': school_fees.objects.filter(school_fee_name='library_free').values(),
+        'other_fee': school_fees.objects.filter(school_fee_name='other_fees').values(),
+    }
 
     return HttpResponse(template.render(context, request))
 
@@ -579,16 +580,16 @@ def print_cor(request, student_number):
             'other_fees': other_fees,
             'total_amount': total_amount,
 
-            'subject1': Subject.objects.filter(course_code=subject1).values(),
-            'subject2': Subject.objects.filter(course_code=subject2).values(),
-            'subject3': Subject.objects.filter(course_code=subject3).values(),
-            'subject4': Subject.objects.filter(course_code=subject4).values(),
-            'subject5': Subject.objects.filter(course_code=subject5).values(),
-            'subject6': Subject.objects.filter(course_code=subject6).values(),
-            'subject7': Subject.objects.filter(course_code=subject7).values(),
-            'subject8': Subject.objects.filter(course_code=subject8).values(),
-            'subject9': Subject.objects.filter(course_code=subject9).values(),
-            'subject10': Subject.objects.filter(course_code=subject10).values(),
+            'subject1': Subject.objects.filter(program=enrolled_student.course, course_code=subject1).values(),
+            'subject2': Subject.objects.filter(program=enrolled_student.course, course_code=subject2).values(),
+            'subject3': Subject.objects.filter(program=enrolled_student.course, course_code=subject3).values(),
+            'subject4': Subject.objects.filter(program=enrolled_student.course, course_code=subject4).values(),
+            'subject5': Subject.objects.filter(program=enrolled_student.course, course_code=subject5).values(),
+            'subject6': Subject.objects.filter(program=enrolled_student.course, course_code=subject6).values(),
+            'subject7': Subject.objects.filter(program=enrolled_student.course, course_code=subject7).values(),
+            'subject8': Subject.objects.filter(program=enrolled_student.course, course_code=subject8).values(),
+            'subject9': Subject.objects.filter(program=enrolled_student.course, course_code=subject9).values(),
+            'subject10': Subject.objects.filter(program=enrolled_student.course, course_code=subject10).values(),
 
             
             'reg_fee': school_fees.objects.filter(school_fee_name='reg_fee').values(),

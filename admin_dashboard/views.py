@@ -1,5 +1,5 @@
 from django.shortcuts import render , redirect, get_object_or_404
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse,JsonResponse, HttpResponseRedirect
 from .models import student, Subject, Instructor, Program, Checklist, ChecklistItem, school_fees
 from .cor import generate_cor
 from django.template.loader import get_template
@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from decimal import Decimal
 from django.db.utils import IntegrityError
+from django.urls import reverse
 
 
 allstudents = student.objects.all()
@@ -151,9 +152,39 @@ def enroll_student(request, enrollee_type):
             return render(request, "admin_dashboard/enroll_student.html", {'form_data': request.POST, 'enrollee_type': enrollee_type,'programs':Program.objects.all()})
     return render(request, "admin_dashboard/enroll_student.html", {'enrollee_type': enrollee_type,'programs':Program.objects.all()})
 
-
+#----------------------CHECKLIST PAGE------SEARCH STUDENT
 def admin_checklist(request):
-    return render(request, "admin_dashboard/checklist.html",{})
+    if request.method == 'POST':
+
+        search_student_id = request.POST.get('student_number')
+        search_student = student.objects.get(studentnumber=search_student_id)
+
+        checklist_items =ChecklistItem.objects.filter(checklist__student=search_student.user)
+        all_subjects = Subject.objects.filter(program=search_student.course)
+
+        year_semester_subjects ={}
+        for year in range(1, 5):
+            for sem in [1, 2]:
+                subjects = all_subjects.filter(year=year, semester=sem)
+                enrolled = checklist_items.filter(subject__in=subjects)
+
+                enrolled_dict = {item.subject: item for item in enrolled}
+
+                year_semester_subjects[f"Year {year} - Semester {sem}"] = [
+                    {"subject": subj, "status": "Not Enrolled"} if subj not in enrolled_dict
+                    else {"subject": subj, "status": enrolled_dict[subj].status, "grade": enrolled_dict[subj].grade, "instructor": enrolled_dict[subj].instructor}
+                    for subj in subjects
+                ]
+
+        context = {
+            'student': student.objects.get(studentnumber=search_student_id),
+            'year_semester_subjects': year_semester_subjects,
+        }
+
+        return render(request, "admin_dashboard/checklist.html", context)
+    else:
+        return render(request, "admin_dashboard/checklist.html", {'student':None})
+
 def grades_input(request):
     current_year = datetime.now().year
     academic_years = [f"{current_year}-{current_year + 1}",f"{current_year + 1}-{current_year + 2}",f"{current_year - 1}-{current_year}",]
@@ -167,30 +198,6 @@ def grades_input(request):
         'instructors':instructors
     }
     return render(request, "admin_dashboard/grades_input.html",context)
-
-def fetch_student_checklist(request):
-    student_number = request.GET.get('student_number')
-    student_data = get_object_or_404(student, studentnumber=student_number)
-    response_data ={
-        "firstname": student_data.firstname,
-        "middlename": student_data.middlename,
-        "lastname": student_data.lastname,
-        "suffix": student_data.suffix,
-        "year": student_data.year,
-        "course": student_data.course,
-        "current_date": datetime.now().strftime("%B %d, %Y"),
-    }
-    return JsonResponse(response_data)
-
-def fetch_subjects(request):
-    program_id = request.GET.get('program_id')
-    if not program_id:
-        return JsonResponse({'error': 'Program ID missing'}, status=400)
-    
-    subjects = Subject.objects.filter(program_id=program_id).values(
-        'id', 'course_code', 'course_title', 'subject_units_lec', 'subject_units_lab'
-    )
-    return JsonResponse(list(subjects), safe=False)
 
 #-------------COONFIGURATION PAGE--SUBJECT---INSTRUCTOR------------------
 def admin_config(request):
@@ -464,8 +471,8 @@ def print_cor(request, student_number):
 
         for sub in input_subjects:
 
-            units_lab = Subject.objects.filter(course_code=sub).values_list('subject_units_lab')
-            units_lec = Subject.objects.filter(course_code=sub).values_list('subject_units_lec')
+            units_lab = Subject.objects.filter(program=enrolled_student.course,course_code=sub).values_list('subject_units_lab')
+            units_lec = Subject.objects.filter(program=enrolled_student.course,course_code=sub).values_list('subject_units_lec')
 
             for subject in units_lab:
                 for lab_units in subject:

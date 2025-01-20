@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'enrollment_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dcs_enrolled_students',
+        'NAME': 'dcs_enroll',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': 'localhost',

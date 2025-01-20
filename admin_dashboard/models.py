@@ -30,8 +30,6 @@ class student(models.Model):
     new_or_old = models.CharField(max_length=50, null=True)
 
 
-    class Meta:
-        db_table = 'students'
 
     def __str__(self):
         return f"{self.studentnumber} - {self.lastname}"
@@ -93,7 +91,16 @@ class ChecklistItem(models.Model):
         ],
         default="Pending"
     )
-    instructor = models.CharField(max_length=100, blank=True)
+    instructor = models.ForeignKey(Instructor, on_delete=models.SET_NULL, null=True, blank=True)
+
+    semester = models.IntegerField(editable=False, null=True, blank=True)
+    year = models.IntegerField(editable=False, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.semester or not self.year:
+            self.semester = self.subject.semester
+            self.year = self.subject.year
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.subject.course_code} - {self.status}"
@@ -102,6 +109,3 @@ class school_fees(models.Model):
 
     school_fee_name = models.CharField(max_length=50, null=True)
     school_fee_value = models.DecimalField(max_digits=6, decimal_places=2, null=True)
-
-    class Meta:
-        db_table = 'school_fee'

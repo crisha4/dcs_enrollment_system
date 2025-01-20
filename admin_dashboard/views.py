@@ -1,6 +1,6 @@
 from django.shortcuts import render , redirect, get_object_or_404
 from django.http import HttpResponse,JsonResponse
-from .models import student, Subject, Instructor, Program, Checklist, school_fees
+from .models import student, Subject, Instructor, Program, Checklist, ChecklistItem, school_fees
 from .cor import generate_cor
 from django.template.loader import get_template
 from xhtml2pdf import pisa
@@ -317,7 +317,7 @@ def process_cor(request, student_number):
 
     template = get_template('admin_dashboard/process_cor.html')
     enrolled_student = student.objects.get(studentnumber=student_number)
-    subject_code = Subject.objects.order_by('course_code')
+    subject_code = Subject.objects.filter(program=enrolled_student.course).order_by('year', 'semester', 'course_code')
     current_school_year = datetime.now().year
     previous_school_year = datetime.now().year - 1
     next_school_year = datetime.now().year + 1
@@ -415,7 +415,7 @@ def print_cor(request, student_number):
         
     if request.method == 'POST':
 
-        enrolled_student = student.objects.filter(studentnumber = student_number)
+        enrolled_student = student.objects.get(studentnumber = student_number)
         semester = request.POST.get('semester')
         yearstanding = request.POST.get('yearstanding')
         Section = request.POST.get('section')
@@ -425,6 +425,7 @@ def print_cor(request, student_number):
         other_fees = request.POST.get('other_fees')
         late_reg = request.POST.get('late_reg')
         ID_fee = request.POST.get('ID_fee')
+        student_checklist, created = Checklist.objects.get_or_create(student__student__studentnumber=student_number)
 
         date_enrolled = datetime.today()
         tuition = 0
@@ -542,7 +543,20 @@ def print_cor(request, student_number):
         total_amount = float(total_amount) + float(other_fees)
         total_amount = float(total_amount) + float(ID_fee)
 
-
+        for sub in input_subjects:
+            if sub:
+                try: 
+                    subject_instance = Subject.objects.get(program=enrolled_student.course, course_code=sub)
+                    ChecklistItem.objects.get_or_create(
+                        checklist = student_checklist,
+                        subject = subject_instance,
+                        defaults={
+                            "status": "Pending",
+                            "instructor": None,
+                        },
+                    )
+                except Subject.DoesNotExist:
+                    print(f'Subject with code {sub} does not exist.')
 
         context = {
 
@@ -589,6 +603,8 @@ def print_cor(request, student_number):
 
             'user': request.user,
         }
+
+
 
         student.objects.filter(studentnumber=student_number).update(
 

@@ -3,7 +3,7 @@
 {% block title %}Student Dashboard{% endblock %}
 
 {% block content %}
-  <div class="container-fluid">
+<div class="container-fluid">
     <!-- Header Section -->
     <div class="row mb-4">
         <div class="col-md-12">
@@ -16,45 +16,55 @@
                 <div class="card-body">
                     <h5 class="card-title text-uppercase fw-bold text-secondary">Profile Information</h5>
                     <hr class="mb-4">
+                    {% if student %}
                     <div class="row mb-3">
                         <div class="col-md-4 text-muted fw-semibold">Student ID</div>
-                        <div class="col-md-8">2022-11724</div>
+                        <div class="col-md-8">{{ student.studentnumber }}</div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-4 text-muted fw-semibold">Full Name</div>
-                        <div class="col-md-8">Danilo De Jesus</div>
+                        <div class="col-md-8">{{ student.firstname }} {{ student.middlename|default:'' }} {{ student.student.lastname }} {{ student.suffix|default:'' }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 text-muted fw-semibold">Birth Date</div>
+                        <div class="col-md-8">{{ student.dateofbirth }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 text-muted fw-semibold">Gender</div>
+                        <div class="col-md-8">{{ student.gender }}</div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-4 text-muted fw-semibold">Course</div>
-                        <div class="col-md-8">Bachelor of Science in Computer Science</div>
+                        <div class="col-md-8">{{ student.course }}</div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-4 text-muted fw-semibold">Year Level</div>
-                        <div class="col-md-8">3rd Year</div>
+                        <div class="col-md-8">{{ student.year }}</div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-4 text-muted fw-semibold">Section</div>
-                        <div class="col-md-8">BSCS 3-3</div>
+                        <div class="col-md-8">{{ student.sectionyear }} - {{ student.section }}</div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-4 text-muted fw-semibold">Email</div>
-                        <div class="col-md-8">danilobuban09@gmail.com</div>
+                        <div class="col-md-8">{{ student.email }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 text-muted fw-semibold">Address</div>
+                        <div class="col-md-8">{{ student.address }}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 text-muted fw-semibold">Contact Number</div>
-                        <div class="col-md-8">09168853198</div>
+                        <div class="col-md-8">{{ student.contact }}</div>
                     </div>
+                    {% else %}
+                    <div class="alert alert-danger">
+                        No profile data found for this student.
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </div>
-</main>
-
-<footer class="footer">
-<div class="text-muted text-center">© 2024 CVSU - All rights reserved.</div>
-</footer>
-</div>
-</div>
-    </div>
 {% endblock %}

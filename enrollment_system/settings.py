@@ -79,8 +79,12 @@ WSGI_APPLICATION = 'enrollment_system.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'dcs_enroll',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
+        'PORT': '3306'
     }
 }
 
@@ -124,7 +128,20 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+LOGIN_REDIRECT_URL = 'login_redirect'
+
+LOGIN_URL = 'login'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'enrollmentdcsnoreply@gmail.com'
+EMAIL_HOST_PASSWORD = 'keeu gtnh qpwj ufao'
+DEFAULT_FROM_EMAIL = 'Enrollment System <enrollmentdcsnoreply@gmail.com>'

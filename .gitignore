@@ -3,6 +3,7 @@
 *.pyo
 *.pyd
 __pycache__/
+*.sql
 *.sqlite3
 
 # Environment variables
@@ -20,3 +21,8 @@ venv/
 # System files
 .DS_Store
 Thumbs.db
+
+# Ignore Django migration cache
+**/migrations/*.pyc
+**/migrations/*.pyo
+**/migrations/__pycache__/

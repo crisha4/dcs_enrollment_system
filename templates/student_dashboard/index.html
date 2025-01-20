@@ -14,9 +14,9 @@
                 <div class="row g-0 w-100">
                     <div class="col-6">
                         <div class="p-3 m-1">
-                            <h4>Welcome Back, Student!</h4>
-                            <p class="mb-0">Computer Science</p>
-                            <p class="mb-0">3rd Year</p>
+                            <h4>Welcome Back, {{ user.first_name }}!</h4>
+                            <p class="mb-0">{{ student.course }}</p>
+                            <p class="mb-0">{{ student.year }}</p>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,29 @@
+.header {
+  text-align: center;
+  font-weight: bold;
+}
+.table-custom th {
+  border: 1px solid black;
+  text-align: center;
+}
+.table-custom td {
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+.table-custom tbody tr:last-child td {
+  border-bottom: 1px solid black;
+}
+.table-custom {
+  margin-top: 20px;
+}
+.summary {
+  font-size: 0.9rem;
+  margin-top: 20px;
+}
+.actions {
+  text-align: right;
+  margin-top: 20px;
+}
+.btn {
+  font-weight: bold;
+}

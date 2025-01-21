@@ -20,4 +20,6 @@ urlpatterns = [
     path("search_students/", views.search_students, name='search_students'),
     path("admin_adjust_fees/", views.adjust_fees, name="adjust_fees"),
     path("admin_set_fees/", views.set_fees, name="set_fees"),
+    path("set_enrollment_date_view/", views.set_enrollment_date_view, name="set_enrollment_date_view"),
+    path("set_enrollment_date/", views.set_enrollment_date, name="set_enrollment_date"),
 ]

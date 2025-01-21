@@ -1,0 +1,71 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="mb-3">
+        <h4>Adjust Fees</h4>
+        <div>
+            <div class="card mb-3">
+                <form method="post" action='/set_enrollment_date/'>
+
+                    {% csrf_token %}
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+                            <h6>Starting Enrollment Date</h6>
+
+                            <div class="col-md-2">
+                                <label for="Starting_Month" class="form-label">Month</label>
+                                <input type="number" class="form-control" name="starting_month" max="12" value="{{ starting_month }}" required>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="Starting_Day" class="form-label">Day</label>
+                                <input type="number" class="form-control" name="starting_day" max="31" value="{{ starting_day }}" required>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="Starting_Year" class="form-label">Year</label>
+                                <input type="number" class="form-control" name="starting_year" value="{{ starting_year }}" required>
+                            </div>
+
+                        </div>
+
+                        <br>
+                        <br>
+
+                        <div class="row">
+
+                            <h6>Ending Enrollment Date</h6>
+
+                            <div class="col-md-2">
+                                <label for="Ending_Month" class="form-label">Month</label>
+                                <input type="number" class="form-control" name="ending_month" max="12" value="{{ ending_month }}" required>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="Ending_Day" class="form-label">Day</label>
+                                <input type="number" class="form-control" name="ending_day" max="31" value="{{ ending_day }}" required>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="Ending_Year" class="form-label">Year</label>
+                                <input type="number" class="form-control" name="ending_year" value="{{ ending_year }}" required>
+                            </div>
+   
+                        </div>
+                    
+                    </div>
+        
+                <!-- Submit Button -->
+                <div class="card-footer text-center">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+                
+            </form>
+        </div>
+{% endblock %}

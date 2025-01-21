@@ -42,5 +42,15 @@ class school_fees(models.Model):
     class Meta:
         db_table = 'school_fee'
 
+class enrollment_dates(models.Model):
+
+    enrollment_period = models.CharField(max_length=50, null=True)
+    year = models.IntegerField(null=True)
+    month = models.IntegerField(null=True)
+    day = models.IntegerField(null=True)
+
+    class Meta:
+        db_table = 'enrollment_date'
+
 
     

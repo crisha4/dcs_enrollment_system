@@ -1,0 +1,42 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Add Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6">
+            <div class="card border-0 shadow">
+                <div class="card-header text-center">
+                    <h4 class="card-title mb-0">Add Admin Profile</h4>
+                </div>
+                <div class="card-body">
+                    <form id="add-admin-form">
+                        <div class="mb-3">
+                            <label for="adminName" class="form-label">Name</label>
+                            <input type="text" id="adminName" class="form-control" placeholder="Enter admin's name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="adminEmail" class="form-label">Email</label>
+                            <input type="email" id="adminEmail" class="form-control" placeholder="Enter email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="adminUsername" class="form-label">Username</label>
+                            <input type="text" id="adminUsername" class="form-control" placeholder="Enter username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="adminPassword" class="form-label">Password</label>
+                            <input type="password" id="adminPassword" class="form-control" placeholder="Enter password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmadminPassword" class="form-label">Confirm Password</label>
+                            <input type="password" id="confirmadminPassword" class="form-control" placeholder="Confirm password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Add Admin</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

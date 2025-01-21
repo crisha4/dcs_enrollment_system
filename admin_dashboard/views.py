@@ -28,6 +28,8 @@ def home(request):
 
 def admin_profile(request):
     return render(request, "admin_dashboard/profile.html",{})
+def create_admin(request):
+    return render(request, "admin_dashboard/add-admin.html",{})
 
 def admin_schedule(request):
     return render(request, "admin_dashboard/schedule.html",{})

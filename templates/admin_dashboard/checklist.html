@@ -71,7 +71,7 @@
                 <label class="fw-bold">Course & Section:</label>
                 <span>{{student.course.name}} {{student.sectionyear}}-{{student.section}}</span>
             </div>
-            <a class="btn btn-primary mt-4" href="{% url 'grades_input' %}" value="{{student.studentnumber}}">Input Grades</a>
+            <a class="btn btn-primary mt-4" href="{% url 'print_cog' student.studentnumber %}">Input Grades</a>
         </div>
         
         <div class="mb-3">

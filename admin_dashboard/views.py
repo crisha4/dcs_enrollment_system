@@ -9,12 +9,10 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.utils.crypto import get_random_string
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from decimal import Decimal
 from django.db.utils import IntegrityError
-from django.urls import reverse
+from django.db.models import Sum, F, Avg
 
 
 allstudents = student.objects.all()
@@ -152,7 +150,7 @@ def enroll_student(request, enrollee_type):
             return render(request, "admin_dashboard/enroll_student.html", {'form_data': request.POST, 'enrollee_type': enrollee_type,'programs':Program.objects.all()})
     return render(request, "admin_dashboard/enroll_student.html", {'enrollee_type': enrollee_type,'programs':Program.objects.all()})
 
-#----------------------CHECKLIST PAGE------SEARCH STUDENT
+#------------------CHECKLIST PAGE--SEARCH STUDENT--INPUT GRADES-----------------
 def admin_checklist(request):
     if request.method == 'POST':
 
@@ -184,20 +182,150 @@ def admin_checklist(request):
         return render(request, "admin_dashboard/checklist.html", context)
     else:
         return render(request, "admin_dashboard/checklist.html", {'student':None})
-
-def grades_input(request):
+def grades_input(student_number):
+    enrolled_student =student.objects.get(studentnumber=student_number)
     current_year = datetime.now().year
     academic_years = [f"{current_year}-{current_year + 1}",f"{current_year + 1}-{current_year + 2}",f"{current_year - 1}-{current_year}",]
-    allstudents = student.objects.all()
     subject = Subject.objects.all()
     instructors = Instructor.objects.all()
-    context = {
+
+    checklist_items = ChecklistItem.objects.filter(
+        checklist__student=enrolled_student.user, status="Pending"
+    )
+    gpa = calculate_gpa(checklist_items)
+    total_subjects = checklist_items.count()
+    total_units = checklist_items.aggregate(
+        total_units=Sum(F("subject__subject_units_lec") + F("subject__subject_units_lab"))
+    )["total_units"] or 0
+    return {
         "academic_years": academic_years,
-        'student':allstudents,
+        'student':enrolled_student,
         'subject':subject,
-        'instructors':instructors
+        'instructors':instructors,
+        'checklist_items': checklist_items,
+        'total_subjects': total_subjects,
+        'total_units': total_units,
+        'gpa': gpa,
+        'user': enrolled_student.user,
+        'date': datetime.now(),
     }
-    return render(request, "admin_dashboard/grades_input.html",context)
+def calculate_gpa(checklist_items):
+    graded_items = checklist_items.filter(grade__isnull=False)
+    gpa = graded_items.aggregate(average=Avg('grade'))["average"]
+    return round(gpa, 2) if gpa else "N/A"
+def grades_input_view(request, student_number):
+    data = grades_input(student_number)
+
+    if request.method == "POST":
+        # Handle form submission for grades and instructor assignments
+        grades = request.POST.getlist('grades[]')
+        instructor_ids = request.POST.getlist('instructors[]')
+
+        errors = []
+        valid_grades = []
+        checklist_items = data["checklist_items"]
+
+        if len(grades) != len(checklist_items) or len(instructor_ids) != len(checklist_items):
+            errors.append("The number of grades or instructors does not match the number of checklist items.")
+            data["errors"] = errors
+            return render(request, 'admin_dashboard/grades_input.html', data)
+
+        # Validate grades
+        for index, grade in enumerate(grades):
+            try:
+                grade = float(grade)
+                if 1 <= grade <= 5:
+                    valid_grades.append((index, grade))
+                else:
+                    errors.append(f"Grade at row {index + 1} must be between 1 and 5.")
+            except ValueError:
+                errors.append(f"Grade at row {index + 1} is not a valid number.")
+
+        if errors:
+            data["errors"] = errors
+            return render(request, 'admin_dashboard/grades_input.html', data)
+
+        # If all grades are valid, save them
+        for index, grade in valid_grades:
+            checklist_item = checklist_items[index]
+            checklist_item.grade = grade
+            checklist_item.status = "PASSED" if 1 <= grade <= 4 else "FAILED"
+
+            instructor_id = instructor_ids[index]
+            if instructor_id:
+                checklist_item.instructor = Instructor.objects.get(id=instructor_id)
+
+            checklist_item.save()
+
+        # After saving, generate the COG and return as a PDF
+        context = {
+            "student": data["student"],
+            "checklist_items": data["checklist_items"],
+            "grades": [item.grade for item in data["checklist_items"]],
+            "instructors": data["instructors"],
+            "total_units": data["total_units"],
+            "gpa": data['gpa'],
+            "date": data["date"],
+        }
+
+        # Generate and return the COG as a PDF
+        pdf = generate_cor('admin_dashboard/cog_template.html', context)
+        return HttpResponse(pdf, content_type='application/pdf')
+
+    return render(request, 'admin_dashboard/grades_input.html', data)
+# def print_cog(request, student_number):
+#     data = grades_input(student_number)
+
+#     if request.method == "POST":
+#         # Handle form submission for grades and instructor assignments
+#         grades = request.POST.getlist('grades[]')
+#         instructor_ids = request.POST.getlist('instructors[]')
+
+#         errors = []
+#         valid_grades = []
+#         checklist_items = data["checklist_items"]
+
+#         # Validate grades
+#         for index, grade in enumerate(grades):
+#             try:
+#                 grade = float(grade)
+#                 if 1 <= grade <= 5:
+#                     valid_grades.append((index, grade))
+#                 else:
+#                     errors.append(f"Grade at row {index + 1} must be between 1 and 5.")
+#             except ValueError:
+#                 errors.append(f"Grade at row {index + 1} is not a valid number.")
+
+#         if errors:
+#             data["errors"] = errors
+#             return render(request, 'admin_dashboard/grades_input.html', data)
+
+#         # If all grades are valid, save them
+#         for index, grade in valid_grades:
+#             checklist_item = checklist_items[index]
+#             checklist_item.grade = grade
+#             checklist_item.status = "PASSED" if 1 <= grade <= 4 else "FAILED"
+
+#             instructor_id = instructor_ids[index]
+#             if instructor_id:
+#                 checklist_item.instructor = Instructor.objects.get(id=instructor_id)
+
+#             checklist_item.save()
+
+#         context = {
+#             "student": data["student"],
+#             "checklist_items": data["checklist_items"],
+#             "grades": [item.grade for item in data["checklist_items"]],
+#             "instructors": data["instructors"],
+#             "total_units": data["total_units"],
+#             "gpa": data['gpa'],
+#             "date": data["date"],
+#         }
+#         pdf = generate_cor('admin_dashboard/cog_template.html', context)
+#         return HttpResponse(pdf, content_type='application/pdf')
+#     return redirect('grades_input_view', student_number=student_number)
+        
+
 
 #-------------COONFIGURATION PAGE--SUBJECT---INSTRUCTOR------------------
 def admin_config(request):

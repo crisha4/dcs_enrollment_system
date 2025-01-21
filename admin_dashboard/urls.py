@@ -8,9 +8,12 @@ urlpatterns = [
     path("admin_masterlist/", views.admin_masterlist, name="admin-dashboard-masterlist"),
     path("admin_schedule/", views.admin_schedule, name="admin-dashboard-schedule"),
     path("admin_enrollment/", views.admin_enrollment, name="admin-dashboard-enrollment"),
+    
     path("admin_checklist/", views.admin_checklist, name="admin-dashboard-checklist"),
     path("admin_checklist/<str:student_number>/", views.admin_checklist, name="admin-dashboard-checklist"),
     path("add_grades/", views.grades_input, name="grades_input"),
+    path("add_grades/<str:student_number>", views.grades_input, name="grades_input"),
+    path("grades/input/<str:student_number>/", views.grades_input_view, name="grades_input_view"),
 
     path("print_cor/", views.print_cor, name='print_cor'),
     path("edit_info/<str:student_number>", views.edit_info, name='edit_info'),

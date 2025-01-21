@@ -82,9 +82,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'dcs_enroll',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'yza20',
         'HOST': 'localhost',
-        'PORT': '3306'
+        'PORT': '3308'
     }
 }
 

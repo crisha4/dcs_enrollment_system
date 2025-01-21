@@ -133,26 +133,32 @@
                 </div>
             </form>
             {% if show_modal %}
-            <div class="modal" id="successModal" tabindex="-1" style="display: block;">
+            <div class="modal" id="successModal" tabindex="-1" style="display: block;"> 
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Enrollment Successful</h5>
+                        <div class="modal-header bg-success text-white">
+                            <h5 class="modal-title m-0">Enrollment Successful</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
-                            <p><strong>Student Number:</strong> {{ student_number }}</p>
-                            <p><strong>Username:</strong> {{ username }}</p>
-                            <p><strong>Password:</strong> {{ password }}</p>
+                        <div class="modal-body p-4">
+                            <p class="mb-2"><strong>Student Number:</strong> {{ student_number }}</p>
+                            <p class="mb-2"><strong>Username:</strong> {{ username }}</p>
+                            <p class="mb-2"><strong>Password:</strong> {{ password }}</p>
                         </div>
-                        <div class="modal-footer">
-                            <a href="{% url 'admin-dashboard-masterlist' %}" class="btn btn-primary">Go to Masterlist</a>
-                            <a href="/admin_dashboard/enroll_student/new/" class="btn btn-success" data-bs-dismiss="modal">Add New</a>
-                            <a href="/admin_dashboard/enroll_student/old/" class="btn btn-danger" data-bs-dismiss="modal">Add Old</a>
+                        <div class="modal-footer d-flex justify-content-center gap-3 p-4">
+                            <a href="/admin_dashboard/enroll_student/new/" class="btn btn-success p-2 text-white">
+                                <i class="fa fa-user-plus"></i>&nbsp; Add New Student
+                            </a>
+                            <a href="/admin_dashboard/enroll_student/old/" class="btn btn-success p-2 text-white">
+                                <i class="fa fa-user-check"></i>&nbsp; Add Old Student
+                            </a>
+                            <a href="{% url 'admin-dashboard-masterlist' %}" class="btn btn-secondary p-2 text-white">
+                                <i class="fa fa-list"></i>&nbsp; Go to Masterlist
+                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>        
             <script>
                 window.addEventListener('load', function() {
                     const modal = document.getElementById('successModal');

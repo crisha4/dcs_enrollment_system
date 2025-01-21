@@ -20,6 +20,11 @@
   font-size: 0.9rem;
   margin-top: 20px;
 }
+.table-style th,
+.table-style td {
+    text-align: justify;
+    vertical-align: middle;
+}
 .actions {
   text-align: right;
   margin-top: 20px;

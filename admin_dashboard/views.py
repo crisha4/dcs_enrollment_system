@@ -1,5 +1,5 @@
 from django.shortcuts import render , redirect, get_object_or_404
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse,JsonResponse, HttpResponseRedirect
 from .models import student, Subject, Instructor, Program, Checklist, ChecklistItem, school_fees
 from .cor import generate_cor
 from django.template.loader import get_template
@@ -9,11 +9,10 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.utils.crypto import get_random_string
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from decimal import Decimal
 from django.db.utils import IntegrityError
+from django.db.models import Sum, F, Avg
 
 
 allstudents = student.objects.all()
@@ -29,8 +28,9 @@ def home(request):
 
 def admin_profile(request):
     return render(request, "admin_dashboard/profile.html",{})
-def admin_masterlist(request):
-    return render(request, "admin_dashboard/masterlist.html",{'allstudents':student.objects.all()})
+def create_admin(request):
+    return render(request, "admin_dashboard/add-admin.html",{})
+
 def admin_schedule(request):
     return render(request, "admin_dashboard/schedule.html",{})
 
@@ -152,46 +152,182 @@ def enroll_student(request, enrollee_type):
             return render(request, "admin_dashboard/enroll_student.html", {'form_data': request.POST, 'enrollee_type': enrollee_type,'programs':Program.objects.all()})
     return render(request, "admin_dashboard/enroll_student.html", {'enrollee_type': enrollee_type,'programs':Program.objects.all()})
 
-
+#------------------CHECKLIST PAGE--SEARCH STUDENT--INPUT GRADES-----------------
 def admin_checklist(request):
-    return render(request, "admin_dashboard/checklist.html",{})
-def grades_input(request):
+    if request.method == 'POST':
+
+        search_student_id = request.POST.get('student_number')
+        search_student = student.objects.get(studentnumber=search_student_id)
+
+        checklist_items =ChecklistItem.objects.filter(checklist__student=search_student.user)
+        all_subjects = Subject.objects.filter(program=search_student.course)
+
+        year_semester_subjects ={}
+        for year in range(1, 5):
+            for sem in [1, 2]:
+                subjects = all_subjects.filter(year=year, semester=sem)
+                enrolled = checklist_items.filter(subject__in=subjects)
+
+                enrolled_dict = {item.subject: item for item in enrolled}
+
+                year_semester_subjects[f"Year {year} - Semester {sem}"] = [
+                    {"subject": subj, "status": "Not Enrolled"} if subj not in enrolled_dict
+                    else {"subject": subj, "status": enrolled_dict[subj].status, "grade": enrolled_dict[subj].grade, "instructor": enrolled_dict[subj].instructor}
+                    for subj in subjects
+                ]
+
+        context = {
+            'student': student.objects.get(studentnumber=search_student_id),
+            'year_semester_subjects': year_semester_subjects,
+        }
+
+        return render(request, "admin_dashboard/checklist.html", context)
+    else:
+        return render(request, "admin_dashboard/checklist.html", {'student':None})
+def grades_input(student_number):
+    enrolled_student =student.objects.get(studentnumber=student_number)
     current_year = datetime.now().year
     academic_years = [f"{current_year}-{current_year + 1}",f"{current_year + 1}-{current_year + 2}",f"{current_year - 1}-{current_year}",]
-    allstudents = student.objects.all()
     subject = Subject.objects.all()
     instructors = Instructor.objects.all()
-    context = {
-        "academic_years": academic_years,
-        'student':allstudents,
-        'subject':subject,
-        'instructors':instructors
-    }
-    return render(request, "admin_dashboard/grades_input.html",context)
 
-def fetch_student_checklist(request):
-    student_number = request.GET.get('student_number')
-    student_data = get_object_or_404(student, studentnumber=student_number)
-    response_data ={
-        "firstname": student_data.firstname,
-        "middlename": student_data.middlename,
-        "lastname": student_data.lastname,
-        "suffix": student_data.suffix,
-        "year": student_data.year,
-        "course": student_data.course,
-        "current_date": datetime.now().strftime("%B %d, %Y"),
-    }
-    return JsonResponse(response_data)
-
-def fetch_subjects(request):
-    program_id = request.GET.get('program_id')
-    if not program_id:
-        return JsonResponse({'error': 'Program ID missing'}, status=400)
-    
-    subjects = Subject.objects.filter(program_id=program_id).values(
-        'id', 'course_code', 'course_title', 'subject_units_lec', 'subject_units_lab'
+    checklist_items = ChecklistItem.objects.filter(
+        checklist__student=enrolled_student.user, status="Pending"
     )
-    return JsonResponse(list(subjects), safe=False)
+    gpa = calculate_gpa(checklist_items)
+    total_subjects = checklist_items.count()
+    total_units = checklist_items.aggregate(
+        total_units=Sum(F("subject__subject_units_lec") + F("subject__subject_units_lab"))
+    )["total_units"] or 0
+    return {
+        "academic_years": academic_years,
+        'student':enrolled_student,
+        'subject':subject,
+        'instructors':instructors,
+        'checklist_items': checklist_items,
+        'total_subjects': total_subjects,
+        'total_units': total_units,
+        'gpa': gpa,
+        'user': enrolled_student.user,
+        'date': datetime.now(),
+    }
+def calculate_gpa(checklist_items):
+    graded_items = checklist_items.filter(grade__isnull=False)
+    gpa = graded_items.aggregate(average=Avg('grade'))["average"]
+    return round(gpa, 2) if gpa else "N/A"
+def grades_input_view(request, student_number):
+    data = grades_input(student_number)
+
+    if request.method == "POST":
+        # Handle form submission for grades and instructor assignments
+        grades = request.POST.getlist('grades[]')
+        instructor_ids = request.POST.getlist('instructors[]')
+
+        errors = []
+        valid_grades = []
+        checklist_items = data["checklist_items"]
+
+        if len(grades) != len(checklist_items) or len(instructor_ids) != len(checklist_items):
+            errors.append("The number of grades or instructors does not match the number of checklist items.")
+            data["errors"] = errors
+            return render(request, 'admin_dashboard/grades_input.html', data)
+
+        # Validate grades
+        for index, grade in enumerate(grades):
+            try:
+                grade = float(grade)
+                if 1 <= grade <= 5:
+                    valid_grades.append((index, grade))
+                else:
+                    errors.append(f"Grade at row {index + 1} must be between 1 and 5.")
+            except ValueError:
+                errors.append(f"Grade at row {index + 1} is not a valid number.")
+
+        if errors:
+            data["errors"] = errors
+            return render(request, 'admin_dashboard/grades_input.html', data)
+
+        # If all grades are valid, save them
+        for index, grade in valid_grades:
+            checklist_item = checklist_items[index]
+            checklist_item.grade = grade
+            checklist_item.status = "PASSED" if 1 <= grade <= 4 else "FAILED"
+
+            instructor_id = instructor_ids[index]
+            if instructor_id:
+                checklist_item.instructor = Instructor.objects.get(id=instructor_id)
+
+            checklist_item.save()
+
+        # After saving, generate the COG and return as a PDF
+        context = {
+            "student": data["student"],
+            "checklist_items": data["checklist_items"],
+            "grades": [item.grade for item in data["checklist_items"]],
+            "instructors": data["instructors"],
+            "total_units": data["total_units"],
+            "gpa": data['gpa'],
+            "date": data["date"],
+        }
+
+        # Generate and return the COG as a PDF
+        pdf = generate_cor('admin_dashboard/cog_template.html', context)
+        return HttpResponse(pdf, content_type='application/pdf')
+
+    return render(request, 'admin_dashboard/grades_input.html', data)
+# def print_cog(request, student_number):
+#     data = grades_input(student_number)
+
+#     if request.method == "POST":
+#         # Handle form submission for grades and instructor assignments
+#         grades = request.POST.getlist('grades[]')
+#         instructor_ids = request.POST.getlist('instructors[]')
+
+#         errors = []
+#         valid_grades = []
+#         checklist_items = data["checklist_items"]
+
+#         # Validate grades
+#         for index, grade in enumerate(grades):
+#             try:
+#                 grade = float(grade)
+#                 if 1 <= grade <= 5:
+#                     valid_grades.append((index, grade))
+#                 else:
+#                     errors.append(f"Grade at row {index + 1} must be between 1 and 5.")
+#             except ValueError:
+#                 errors.append(f"Grade at row {index + 1} is not a valid number.")
+
+#         if errors:
+#             data["errors"] = errors
+#             return render(request, 'admin_dashboard/grades_input.html', data)
+
+#         # If all grades are valid, save them
+#         for index, grade in valid_grades:
+#             checklist_item = checklist_items[index]
+#             checklist_item.grade = grade
+#             checklist_item.status = "PASSED" if 1 <= grade <= 4 else "FAILED"
+
+#             instructor_id = instructor_ids[index]
+#             if instructor_id:
+#                 checklist_item.instructor = Instructor.objects.get(id=instructor_id)
+
+#             checklist_item.save()
+
+#         context = {
+#             "student": data["student"],
+#             "checklist_items": data["checklist_items"],
+#             "grades": [item.grade for item in data["checklist_items"]],
+#             "instructors": data["instructors"],
+#             "total_units": data["total_units"],
+#             "gpa": data['gpa'],
+#             "date": data["date"],
+#         }
+#         pdf = generate_cor('admin_dashboard/cog_template.html', context)
+#         return HttpResponse(pdf, content_type='application/pdf')
+#     return redirect('grades_input_view', student_number=student_number)
+        
+
 
 #-------------COONFIGURATION PAGE--SUBJECT---INSTRUCTOR------------------
 def admin_config(request):
@@ -259,14 +395,14 @@ def delete_subject(request, subject_id):
         return redirect('admin_config')
 def save_instructor(request):
     if request.method == 'POST':
-        instructor_id = request.POST.get('instructor_id')  # Hidden field to identify the instructor
+        instructor_id = request.POST.get('instructor_id')
         name = request.POST.get('instructor_name')
         gender = request.POST.get('gender')
         email = request.POST.get('email')
         contact = request.POST.get('contact')
         address = request.POST.get('address')
 
-        if instructor_id:  # Edit existing instructor
+        if instructor_id:
             instructor = get_object_or_404(Instructor, id=instructor_id)
             instructor.name = name
             instructor.gender = gender
@@ -274,7 +410,7 @@ def save_instructor(request):
             instructor.contact = contact
             instructor.address = address
             instructor.save()
-        else:  # Add new instructor
+        else: 
             Instructor.objects.create(
                 name=name,
                 gender=gender,
@@ -292,6 +428,81 @@ def delete_instructor(request, instructor_id):
     else:
         return redirect('admin_config')
 
+#---------------------FEES SETTINGS-----------------------------------
+def adjust_fees(request):
+
+    template = get_template('admin_dashboard/adjust_fees.html')
+
+    get_reg_fee = school_fees.objects.get(school_fee_name='reg_fee')
+    get_insurance = school_fees.objects.get(school_fee_name='insurance')
+    get_sfdf = school_fees.objects.get(school_fee_name='sfdf')
+    get_srf = school_fees.objects.get(school_fee_name='srf')
+    get_misc = school_fees.objects.get(school_fee_name='misc')
+    get_athletics = school_fees.objects.get(school_fee_name='athletics')
+    get_scuaa = school_fees.objects.get(school_fee_name='scuaa')
+    get_library_fee = school_fees.objects.get(school_fee_name='library_fee')
+    get_lab_fees = school_fees.objects.get(school_fee_name='lab_fees')
+    get_tuition_fee = school_fees.objects.get(school_fee_name='tuition_fee')
+    get_nstp_fee = school_fees.objects.get(school_fee_name='nstp_fee')
+    get_id_fee = school_fees.objects.get(school_fee_name='id')
+    
+    context = {
+        'reg_fee': get_reg_fee.school_fee_value,
+        'insurance': get_insurance.school_fee_value,
+        'sfdf': get_sfdf.school_fee_value,
+        'srf': get_srf.school_fee_value,
+        'misc': get_misc.school_fee_value,
+        'athletics': get_athletics.school_fee_value,
+        'scuaa': get_scuaa.school_fee_value,
+        'library_fee': get_library_fee.school_fee_value,
+        'lab_fees': get_lab_fees.school_fee_value,
+        'tuition_fee': get_tuition_fee.school_fee_value,
+        'nstp_fee': get_nstp_fee.school_fee_value,
+        'id_fee': get_id_fee.school_fee_value,
+    }
+
+    return HttpResponse(template.render(context, request))
+
+def set_fees(request):
+    
+    template = get_template("admin_dashboard/notification_set_fees.html")
+
+    Registration_fee = request.POST['registration_fee']
+    Insurance = request.POST['insurance']
+    Sfdf = request.POST['sfdf']
+    Srf = request.POST['srf']
+    Miscellaneous = request.POST['misc']
+    Athletics = request.POST['athletics']
+    Scuaa = request.POST['scuaa']
+    Library_fee = request.POST['library_fee']
+    Lab_fees = request.POST['lab_fees']
+    Tuition_fee = request.POST['tuition_fee']
+    NSTP_fee = request.POST['nstp_fee']
+    ID_fee = request.POST['id']
+    
+    school_fees.objects.filter(school_fee_name='reg_fee').update(school_fee_value=Registration_fee)
+    school_fees.objects.filter(school_fee_name='lab_fees').update(school_fee_value=Lab_fees)
+    school_fees.objects.filter(school_fee_name='insurance').update(school_fee_value=Insurance)
+    school_fees.objects.filter(school_fee_name='sfdf').update(school_fee_value=Sfdf)
+    school_fees.objects.filter(school_fee_name='srf').update(school_fee_value=Srf)
+    school_fees.objects.filter(school_fee_name='misc').update(school_fee_value=Miscellaneous)
+    school_fees.objects.filter(school_fee_name='athletics').update(school_fee_value=Athletics)
+    school_fees.objects.filter(school_fee_name='scuaa').update(school_fee_value=Scuaa)
+    school_fees.objects.filter(school_fee_name='library_fee').update(school_fee_value=Library_fee)
+    school_fees.objects.filter(school_fee_name='tuition_fee').update(school_fee_value=Tuition_fee)
+    school_fees.objects.filter(school_fee_name='nstp_fee').update(school_fee_value=NSTP_fee)
+    school_fees.objects.filter(school_fee_name='tuition_fee').update(school_fee_value=Tuition_fee)
+    school_fees.objects.filter(school_fee_name='id').update(school_fee_value=ID_fee)
+
+    
+    context = {}
+
+    return HttpResponse(template.render(context, request))
+
+#-----------------MASTERLIST FUNCTIONS-SEARCH-EDIT-ENROLL-PRINT COR--------------------------
+
+def admin_masterlist(request):
+    return render(request, "admin_dashboard/masterlist.html",{'allstudents':student.objects.all()})
 def search_students(request):
 
     if request.method == 'POST':
@@ -302,7 +513,7 @@ def search_students(request):
 
         template = get_template('admin_dashboard/search_results.html')
 
-        search_results = student.objects.filter(year=search_year).values() | student.objects.filter(course=search_course).values() | student.objects.filter(studentnumber=search_student_id).values()
+        search_results = student.objects.filter(year=search_year).values() | student.objects.filter(course=search_course) | student.objects.filter(studentnumber=search_student_id).values()
         
         context = {
         'allstudents': allstudents,
@@ -313,38 +524,6 @@ def search_students(request):
     else:
         return HttpResponse("Not Found")
 
-def process_cor(request, student_number):
-
-    template = get_template('admin_dashboard/process_cor.html')
-    enrolled_student = student.objects.get(studentnumber=student_number)
-    subject_code = Subject.objects.filter(program=enrolled_student.course).order_by('year', 'semester', 'course_code')
-    current_school_year = datetime.now().year
-    previous_school_year = datetime.now().year - 1
-    next_school_year = datetime.now().year + 1
-
-    context = {
-        'enrolled_student': enrolled_student,
-        'subject_codes':subject_code,
-        'current_SY':current_school_year,
-        'previous_SY':previous_school_year,
-        'next_SY':next_school_year,
-
-        'lab_fee': school_fees.objects.filter(school_fee_name='lab_fees').values(),
-        'reg_fee': school_fees.objects.filter(school_fee_name='reg_fee').values(),
-        'insurance_fee': school_fees.objects.filter(school_fee_name='insurance').values(),
-        'id_fee': school_fees.objects.filter(school_fee_name='id').values(),
-        'sfdf_fee': school_fees.objects.filter(school_fee_name='sfdf').values(),
-        'srf_fee': school_fees.objects.filter(school_fee_name='srf').values(),
-        'misc_fee': school_fees.objects.filter(school_fee_name='misc').values(),
-        'athletics_fee': school_fees.objects.filter(school_fee_name='athletics').values(),
-        'scuaa_fee': school_fees.objects.filter(school_fee_name='scuaa').values(),
-        'library_fee': school_fees.objects.filter(school_fee_name='library_free').values(),
-        'other_fee': school_fees.objects.filter(school_fee_name='other_fees').values(),
-    }
-
-    return HttpResponse(template.render(context, request))
-
-
 def edit_info(request, student_number):
 
     template = get_template('admin_dashboard/edit_student_info.html')
@@ -354,7 +533,6 @@ def edit_info(request, student_number):
         'programs': Program.objects.all(),
     }
     return HttpResponse(template.render(context, request))
-
 
 def update_info(request, student_number):
 
@@ -411,6 +589,37 @@ def update_info(request, student_number):
 
     return HttpResponse(template.render(context, request))
 
+def process_cor(request, student_number):
+
+    template = get_template('admin_dashboard/process_cor.html')
+    enrolled_student = student.objects.get(studentnumber=student_number)
+    subject_code = Subject.objects.filter(program=enrolled_student.course).order_by('year', 'semester', 'course_code')
+    current_school_year = datetime.now().year
+    previous_school_year = datetime.now().year - 1
+    next_school_year = datetime.now().year + 1
+
+    context = {
+        'enrolled_student': enrolled_student,
+        'subject_codes':subject_code,
+        'current_SY':current_school_year,
+        'previous_SY':previous_school_year,
+        'next_SY':next_school_year,
+
+        'lab_fee': school_fees.objects.filter(school_fee_name='lab_fees').values(),
+        'reg_fee': school_fees.objects.filter(school_fee_name='reg_fee').values(),
+        'insurance_fee': school_fees.objects.filter(school_fee_name='insurance').values(),
+        'id_fee': school_fees.objects.filter(school_fee_name='id').values(),
+        'sfdf_fee': school_fees.objects.filter(school_fee_name='sfdf').values(),
+        'srf_fee': school_fees.objects.filter(school_fee_name='srf').values(),
+        'misc_fee': school_fees.objects.filter(school_fee_name='misc').values(),
+        'athletics_fee': school_fees.objects.filter(school_fee_name='athletics').values(),
+        'scuaa_fee': school_fees.objects.filter(school_fee_name='scuaa').values(),
+        'library_fee': school_fees.objects.filter(school_fee_name='library_free').values(),
+        'other_fee': school_fees.objects.filter(school_fee_name='other_fees').values(),
+    }
+
+    return HttpResponse(template.render(context, request))
+
 def print_cor(request, student_number):
         
     if request.method == 'POST':
@@ -463,8 +672,8 @@ def print_cor(request, student_number):
 
         for sub in input_subjects:
 
-            units_lab = Subject.objects.filter(course_code=sub).values_list('subject_units_lab')
-            units_lec = Subject.objects.filter(course_code=sub).values_list('subject_units_lec')
+            units_lab = Subject.objects.filter(program=enrolled_student.course,course_code=sub).values_list('subject_units_lab')
+            units_lec = Subject.objects.filter(program=enrolled_student.course,course_code=sub).values_list('subject_units_lec')
 
             for subject in units_lab:
                 for lab_units in subject:
@@ -579,16 +788,16 @@ def print_cor(request, student_number):
             'other_fees': other_fees,
             'total_amount': total_amount,
 
-            'subject1': Subject.objects.filter(course_code=subject1).values(),
-            'subject2': Subject.objects.filter(course_code=subject2).values(),
-            'subject3': Subject.objects.filter(course_code=subject3).values(),
-            'subject4': Subject.objects.filter(course_code=subject4).values(),
-            'subject5': Subject.objects.filter(course_code=subject5).values(),
-            'subject6': Subject.objects.filter(course_code=subject6).values(),
-            'subject7': Subject.objects.filter(course_code=subject7).values(),
-            'subject8': Subject.objects.filter(course_code=subject8).values(),
-            'subject9': Subject.objects.filter(course_code=subject9).values(),
-            'subject10': Subject.objects.filter(course_code=subject10).values(),
+            'subject1': Subject.objects.filter(program=enrolled_student.course, course_code=subject1).values(),
+            'subject2': Subject.objects.filter(program=enrolled_student.course, course_code=subject2).values(),
+            'subject3': Subject.objects.filter(program=enrolled_student.course, course_code=subject3).values(),
+            'subject4': Subject.objects.filter(program=enrolled_student.course, course_code=subject4).values(),
+            'subject5': Subject.objects.filter(program=enrolled_student.course, course_code=subject5).values(),
+            'subject6': Subject.objects.filter(program=enrolled_student.course, course_code=subject6).values(),
+            'subject7': Subject.objects.filter(program=enrolled_student.course, course_code=subject7).values(),
+            'subject8': Subject.objects.filter(program=enrolled_student.course, course_code=subject8).values(),
+            'subject9': Subject.objects.filter(program=enrolled_student.course, course_code=subject9).values(),
+            'subject10': Subject.objects.filter(program=enrolled_student.course, course_code=subject10).values(),
 
             
             'reg_fee': school_fees.objects.filter(school_fee_name='reg_fee').values(),

@@ -77,6 +77,10 @@ class Checklist(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE, null=True,default=1)
     subjects = models.ManyToManyField(Subject, through="ChecklistItem")
 
+    def __str__(self):
+        return f"{self.student} - {self.program.name}"
+
+
 class ChecklistItem(models.Model):
     checklist = models.ForeignKey(Checklist, on_delete=models.CASCADE, related_name="items")
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
@@ -103,7 +107,7 @@ class ChecklistItem(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.subject.course_code} - {self.status}"
+        return f"{self.checklist.student} - {self.subject.course_code} - {self.status}"
 
 class school_fees(models.Model):
 

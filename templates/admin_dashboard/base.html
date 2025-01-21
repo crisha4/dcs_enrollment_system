@@ -31,9 +31,23 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a href="{% url 'admin-dashboard-profile' %}" class="sidebar-link">
-                            <i class="fa-regular fa-user pe-2"></i> Profile
-                        </a>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'admin-dashboard-profile' %}" class="sidebar-link">
+                                <i class="fa-regular fa-user"></i>
+                                <span>&nbsp; Profile</span>
+                            </a>
+                            <button class="btn btn-link p-3 sidebar-toggle" data-bs-toggle="collapse" data-bs-target="#profile-dropdown" aria-expanded="false" aria-controls="profile-dropdown">
+                                <i class="fa-solid fa-chevron-down text-white" style="opacity: 0.6;"></i>
+                            </button>
+                        </div>
+                        <ul id="profile-dropdown" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a href="{% url 'admin-create-new' %}" class="sidebar-link">
+                                    &nbsp; &nbsp;<i class="fa-solid fa-user-plus pe-2"></i>
+                                    Add Admin Profile
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="sidebar-item">
                         <a href="{% url 'admin-dashboard-masterlist' %}" class="sidebar-link">
@@ -75,6 +89,7 @@
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a href="{% url 'admin-dashboard-profile' %}" class="dropdown-item">Profile</a>
                                 <a href="{% url 'admin_config' %}" class="dropdown-item">Configuration</a>
+                                <a href="{% url 'adjust_fees' %}" class="dropdown-item">Adjust fees</a>
                                 <form action="{% url 'logout' %}" method="post">
                                     {% csrf_token %}
                                     <button type="submit" class="dropdown-item">Logout</button>

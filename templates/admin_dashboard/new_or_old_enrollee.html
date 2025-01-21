@@ -3,12 +3,39 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block content %}
-
-<div class="container-fluid">
-    <h1 class="mb-3">Enroll a Student</h1>
-    <div id="options" style="height: 100vh;">
-        <a class="btn btn-primary" href="/admin_dashboard/enroll_student/new/">New</a>
-        <a class="btn btn-primary" href="/admin_dashboard/enroll_student/old/">Old</a>
+<div class="container-fluid d-flex p-5 mt-5 justify-content-center align-items-center">
+    <div class="card text-center shadow-sm" style="width: 35rem;">
+        <div class="card-header bg-secondary text-white">
+            <h2 class="m-0"><strong>Enroll a Student</strong></h2>
+        </div>
+        <div class="card-body p-5">
+            <p class="card-text mb-4">
+                <i>Select "New" for enrolling a new student and <br>
+                "Old" for re-enrolling an existing one.</i>
+            </p>
+            <div class="d-flex justify-content-center gap-4">
+                <!-- New Student Button -->
+                <a class="btn btn-success d-flex align-items-center justify-content-center rounded-circle shadow-sm" 
+                   href="/admin_dashboard/enroll_student/new/" 
+                   style="width: 80px; height: 80px; font-size: 24px;">
+                    <i class="fa fa-user-plus"></i>
+                </a>
+                <!-- Old Student Button -->
+                <a class="btn btn-success d-flex align-items-center justify-content-center rounded-circle shadow-sm" 
+                   href="/admin_dashboard/enroll_student/old/" 
+                   style="width: 80px; height: 80px; font-size: 24px;">
+                    <i class="fa fa-user-check"></i>
+                </a>
+            </div>
+            <!-- Legend -->
+            <div class="mt-4">
+                <small>
+                    <span class="text-primary"><i class="fa fa-user-plus"></i> New Student</span> &nbsp; | &nbsp;
+                    <span class="text-success"><i class="fa fa-user-check"></i> Old Student</span>
+                </small>
+            </div>
+        </div>
     </div>
 </div>
+
 {% endblock %}

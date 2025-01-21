@@ -11,11 +11,16 @@
       font-weight: bold;
     }
     .table-custom th {
+      padding-top: 5px;
       border: 1px solid black;
+      text-align: center;
+      vertical-align: middle;
     }
     .table-custom td {
+
       border-left: 1px solid black;
       border-right: 1px solid black;
+      vertical-align: middle;
     }
     .table-custom tbody tr {
       border: none;
@@ -31,6 +36,13 @@
       border-top: none; /* Remove top border from tbody rows */
       border-bottom: none; /* Remove bottom border from tbody rows */
     }
+    .table-custom tr{
+      padding-top:5px;
+      padding-left:5px;
+    }
+    .table-custom th{
+      padding-left: -5px;
+    }
     .table-custom {
       margin-top: 20px;
     }
@@ -38,91 +50,105 @@
       font-size: 0.9rem;
       margin-top: 10px;
     }
+    .table-student{
+      padding-top:5px;
+      padding-left:5px;
+    }
+    h4{
+      font-size: larger;
+    }
+    .table-total{
+      width: 10%;
+      text-align: justify;
+      border: none;
+      border-collapse: collapse;
+    }
   </style>
   
 </head>
 <body>
   <div class="container mt-4">
     <div class="header mx-auto" style="width: 400px; text-align: center;">
-      <h6>CAVITE STATE UNIVERSITY</h6>
+      <h4>CAVITE STATE UNIVERSITY</h4>
       <p>Bacoor City Campus</p>
       <p>Place II Soldiers Hills IV, Molino VI, City of Bacoor</p>
       <h5>OFFICE OF THE CAMPUS REGISTRAR</h5>
-      <h6>CERTIFICATE OF GRADES</h6>
+      <h4>CERTIFICATE OF GRADES</h4>
     </div>
 
-    <div class="row">
-      <div class="col-md-6">
-        <p><strong>Full Name:</strong> My full name</p>
-        <p><strong>Year Level:</strong> First Year</p>
-        <p><strong>Degree:</strong> Bachelor of Science in Computer Science</p>
-        <p><strong>Date:</strong> Month Day, Year</p>
-      </div>
-      <div class="col-md-6">
-        <p><strong>Student No.:</strong> 20XXXXXXX</p>
-        <p><strong>Academic Year:</strong> 
-          <select class="form-select d-inline w-auto">
-            <option>2025-2026</option>
-            <option>2026-2027</option>
-          </select>
-        </p>
-      </div>
-    </div>
+    <table class="table-student">
+      <tr>
+        <td><strong>Full Name:</strong> {{ student.firstname }} {{ student.middlename|default:'' }} {{ student.lastname }}</td>
+        <td><strong>Student No.:</strong> {{ student.studentnumber }}</td>
+      </tr>
+      <tr>
+        <td><strong>Year Level:</strong> {{ student.year }}</td>
+        <td><strong>Academic Year:</strong>{{schoolyear}}</td>
+      </tr>
+      <tr>
+        <td><strong>Degree:</strong> {{ student.course.full }}</td>
+      </tr>
+      <tr>
+        <td><strong>Date:</strong> {{ date|date:"F j, Y" }}</td>
+      </tr>
+
+    </table>
 
     <table class="table table-custom">
       <thead>
         <tr>
-          <th>Course Code</th>
-          <th>Units</th>
-          <th>Course Title</th>
-          <th>Grades</th>
-          <th>Remarks</th>
-          <th>Instructor</th>
+          <th>CODE</th>
+          <th>UNITS</th>
+          <th style="width: 40%;">COURSE TITLE</th>
+          <th>GRADE</th>
+          <th>REMARKS</th>
+          <th style="width:20%">FACULTY</th>
         </tr>
       </thead>
       <tbody>
+        {% for item in checklist_items %}
         <tr>
-          <td><select class="form-select">
-            <option>---</option>
-          </select></td>
-          <td></td>
-          <td></td>
-          <td><input type="text" class="form-control"></td>
-          <td></td>
-          <td><select class="form-select">
-            <option>---</option>
-          </select></td>
+            <td>{{ item.subject.course_code }}</td>
+            <td>&nbsp;&nbsp;{{ item.subject.subject_units_lec}}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{ item.subject.subject_units_lab }}</td>
+            <td>{{ item.subject.course_title }}</td>
+            <td>&nbsp;&nbsp;{{ item.grade }}</td>
+            <td>&nbsp;&nbsp;{{ item.status }}</td>
+            <td>
+                {% if item.instructor %}
+                    {{ item.instructor.name }}
+                {% else %}
+                    Not Assigned
+                {% endif %}
+            </td>
         </tr>
-        <tr>
-          <td><select class="form-select">
-            <option>---</option>
-          </select></td>
-          <td></td>
-          <td></td>
-          <td><input type="text" class="form-control"></td>
-          <td></td>
-          <td><select class="form-select">
-            <option>---</option>
-          </select></td>
-        </tr>
+        {% endfor %}
       </tbody>
     </table>
 
-    <div class="row mt-3 mx-auto" style="width: 600px;">
-      <div class="col-md-6">
-        <p><strong>Total subjects enrolled:</strong> __________</p>
-        <p><strong>Total credits enrolled:</strong> __________</p>
-        <p><strong>Grade Point Average:</strong> __________</p>
-      </div>
-    </div>
+    <table class="table-total mx-auto">
+      <tbody>
+        <tr>
+          <td style="padding-left:110px;padding-top: 10px;"><strong>Total subjects enrolled:</strong></td>
+          <td style="padding-top: 10px;">{{ checklist_items|length }}</td>
+        </tr>
+        <tr>
+          <td style="padding-left:110px;padding-top: 10px;"><strong>Total credits enrolled:</strong></td>
+          <td style="padding-top: 10px;">{{total_units}}</td>
+        </tr>
+        <tr>
+          <td style="padding-left:110px;padding-top: 10px;"><strong>Grade Point Average:</strong></td>
+          <td style="padding-top: 10px;">{{ gpa }}</td>
+        </tr>
+      </tbody>
+    </table>
 
     <p class="remarks">Remarks: For Evaluation/Enrollment Purposes Only</p>
 
     <div class="row mt-4">
       <div class="col-md-6">
-        <p><strong>Encoder Name:</strong> __________</p>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-6" style="text-align: right;">
+        <p><strong>Encoder Name:</strong> {{ user.first_name|default:"registrar" }} {{ user.last_name }}</p>
         <p><strong>Campus Staff</strong></p>
       </div>
     </div>

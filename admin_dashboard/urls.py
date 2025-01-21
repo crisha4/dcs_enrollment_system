@@ -29,4 +29,7 @@ urlpatterns = [
     path("delete_subject/<str:subject_id>/", views.delete_subject, name='delete_subject'),
     path('save_instructor/', views.save_instructor, name='save_instructor'),
     path("delete_instructor/<str:instructor_id>/", views.delete_instructor, name='delete_instructor'),
+
+    path("admin_adjust_fees/", views.adjust_fees, name="adjust_fees"),
+    path("admin_set_fees/", views.set_fees, name="set_fees"),
 ]

@@ -426,6 +426,77 @@ def delete_instructor(request, instructor_id):
     else:
         return redirect('admin_config')
 
+#---------------------FEES SETTINGS-----------------------------------
+def adjust_fees(request):
+
+    template = get_template('admin_dashboard/adjust_fees.html')
+
+    get_reg_fee = school_fees.objects.get(school_fee_name='reg_fee')
+    get_insurance = school_fees.objects.get(school_fee_name='insurance')
+    get_sfdf = school_fees.objects.get(school_fee_name='sfdf')
+    get_srf = school_fees.objects.get(school_fee_name='srf')
+    get_misc = school_fees.objects.get(school_fee_name='misc')
+    get_athletics = school_fees.objects.get(school_fee_name='athletics')
+    get_scuaa = school_fees.objects.get(school_fee_name='scuaa')
+    get_library_fee = school_fees.objects.get(school_fee_name='library_fee')
+    get_lab_fees = school_fees.objects.get(school_fee_name='lab_fees')
+    get_tuition_fee = school_fees.objects.get(school_fee_name='tuition_fee')
+    get_nstp_fee = school_fees.objects.get(school_fee_name='nstp_fee')
+    get_id_fee = school_fees.objects.get(school_fee_name='id')
+    
+    context = {
+        'reg_fee': get_reg_fee.school_fee_value,
+        'insurance': get_insurance.school_fee_value,
+        'sfdf': get_sfdf.school_fee_value,
+        'srf': get_srf.school_fee_value,
+        'misc': get_misc.school_fee_value,
+        'athletics': get_athletics.school_fee_value,
+        'scuaa': get_scuaa.school_fee_value,
+        'library_fee': get_library_fee.school_fee_value,
+        'lab_fees': get_lab_fees.school_fee_value,
+        'tuition_fee': get_tuition_fee.school_fee_value,
+        'nstp_fee': get_nstp_fee.school_fee_value,
+        'id_fee': get_id_fee.school_fee_value,
+    }
+
+    return HttpResponse(template.render(context, request))
+
+def set_fees(request):
+    
+    template = get_template("admin_dashboard/notification_set_fees.html")
+
+    Registration_fee = request.POST['registration_fee']
+    Insurance = request.POST['insurance']
+    Sfdf = request.POST['sfdf']
+    Srf = request.POST['srf']
+    Miscellaneous = request.POST['misc']
+    Athletics = request.POST['athletics']
+    Scuaa = request.POST['scuaa']
+    Library_fee = request.POST['library_fee']
+    Lab_fees = request.POST['lab_fees']
+    Tuition_fee = request.POST['tuition_fee']
+    NSTP_fee = request.POST['nstp_fee']
+    ID_fee = request.POST['id']
+    
+    school_fees.objects.filter(school_fee_name='reg_fee').update(school_fee_value=Registration_fee)
+    school_fees.objects.filter(school_fee_name='lab_fees').update(school_fee_value=Lab_fees)
+    school_fees.objects.filter(school_fee_name='insurance').update(school_fee_value=Insurance)
+    school_fees.objects.filter(school_fee_name='sfdf').update(school_fee_value=Sfdf)
+    school_fees.objects.filter(school_fee_name='srf').update(school_fee_value=Srf)
+    school_fees.objects.filter(school_fee_name='misc').update(school_fee_value=Miscellaneous)
+    school_fees.objects.filter(school_fee_name='athletics').update(school_fee_value=Athletics)
+    school_fees.objects.filter(school_fee_name='scuaa').update(school_fee_value=Scuaa)
+    school_fees.objects.filter(school_fee_name='library_fee').update(school_fee_value=Library_fee)
+    school_fees.objects.filter(school_fee_name='tuition_fee').update(school_fee_value=Tuition_fee)
+    school_fees.objects.filter(school_fee_name='nstp_fee').update(school_fee_value=NSTP_fee)
+    school_fees.objects.filter(school_fee_name='tuition_fee').update(school_fee_value=Tuition_fee)
+    school_fees.objects.filter(school_fee_name='id').update(school_fee_value=ID_fee)
+
+    
+    context = {}
+
+    return HttpResponse(template.render(context, request))
+
 #-----------------MASTERLIST FUNCTIONS-SEARCH-EDIT-ENROLL-PRINT COR--------------------------
 
 def admin_masterlist(request):
